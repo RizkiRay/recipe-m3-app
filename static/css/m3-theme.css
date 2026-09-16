@@ -175,11 +175,11 @@ body {
 }
 
 .recipe-header-card {
-  padding: 18px 20px;
+  padding: 16px 18px 20px;
 }
 
 .recipe-title {
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--md-sys-color-on-surface);
@@ -188,58 +188,47 @@ body {
 }
 
 .recipe-chef {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--md-sys-color-primary);
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
 .recipe-desc {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--md-sys-color-on-surface-variant);
-  line-height: 1.5;
-  margin-bottom: 16px;
+  line-height: 1.45;
+  margin-bottom: 14px;
 }
 
-.recipe-meta-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.meta-chip {
+.recipe-meta-inline {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: var(--md-sys-color-surface-container);
-  padding: 10px 8px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 0.8rem;
+  color: var(--md-sys-color-on-surface-variant);
+  padding-top: 10px;
+  border-top: 1px dashed var(--md-sys-color-outline-variant);
 }
 
-.meta-chip .material-symbols-outlined {
-  font-size: 18px;
+.meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+}
+
+.meta-item i {
   color: var(--md-sys-color-primary);
 }
 
-.meta-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--md-sys-color-outline);
-  letter-spacing: 0.04em;
-}
-
-.meta-value {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--md-sys-color-on-surface);
+.meta-divider {
+  color: var(--md-sys-color-outline-variant);
+  font-weight: normal;
 }
 
 /* Clean Segmented Control Tabs */

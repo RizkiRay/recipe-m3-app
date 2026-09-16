@@ -46,22 +46,21 @@
         </div>
         <p class="recipe-desc">{{ recipe.description }}</p>
         
-        <div class="recipe-meta-row">
-          <div class="meta-chip">
-            <i data-lucide="clock" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
-            <span class="meta-label">Persiapan</span>
-            <span class="meta-value">{{ recipe.prep_time }}</span>
-          </div>
-          <div class="meta-chip">
-            <i data-lucide="flame" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
-            <span class="meta-label">Masak</span>
-            <span class="meta-value">{{ recipe.cook_time }}</span>
-          </div>
-          <div class="meta-chip">
-            <i data-lucide="users" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
-            <span class="meta-label">Porsi</span>
-            <span class="meta-value">{{ recipe.servings }}</span>
-          </div>
+        <div class="recipe-meta-inline">
+          <span class="meta-item">
+            <i data-lucide="clock" style="width: 15px; height: 15px;"></i>
+            {{ recipe.prep_time }}
+          </span>
+          <span class="meta-divider">•</span>
+          <span class="meta-item">
+            <i data-lucide="flame" style="width: 15px; height: 15px;"></i>
+            {{ recipe.cook_time }}
+          </span>
+          <span class="meta-divider">•</span>
+          <span class="meta-item">
+            <i data-lucide="users" style="width: 15px; height: 15px;"></i>
+            {{ recipe.servings }}
+          </span>
         </div>
       </div>
     </div>
