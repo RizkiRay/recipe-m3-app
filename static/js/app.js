@@ -235,9 +235,10 @@ function onFaceResults(results) {
   const angleRad = Math.atan2(dy, dx);
   const angleDeg = angleRad * (180 / Math.PI);
 
-  if (angleDeg < -18) {
+  // Threshold: ±10° to 12° tilt (ringan & sangat santai)
+  if (angleDeg < -10) {
     triggerHeadGesture('next', '👉 Kepala Miring Kanan: Lanjut!');
-  } else if (angleDeg > 18) {
+  } else if (angleDeg > 10) {
     triggerHeadGesture('prev', '👈 Kepala Miring Kiri: Balik!');
   }
 }
