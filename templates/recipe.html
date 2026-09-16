@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>{{ recipe.title }} - Buku Resep M3</title>
+  <link rel="stylesheet" href="/static/css/m3-theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header class="top-app-bar">
+    <h1>📖 Buku Resep Dapur</h1>
+    <span class="app-badge">M3 Cooking UI</span>
+  </header>
+
+  <main class="container">
+    
+    <!-- Video Card -->
+    <div class="video-card">
+      <div class="video-wrapper">
+        <iframe 
+          src="https://www.youtube.com/embed/{{ recipe.youtube_id }}?enablejsapi=1" 
+          title="Video Resep YouTube" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="recipe-header-card">
+        <h2 class="recipe-title">{{ recipe.title }}</h2>
+        <div class="recipe-chef">Oleh {{ recipe.chef }}</div>
+        <p style="font-size: 0.95rem; color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px;">
+          {{ recipe.description }}
+        </p>
+        <div class="recipe-meta-row">
+          <div class="meta-chip">⏱ Persiapan: {{ recipe.prep_time }}</div>
+          <div class="meta-chip">🍳 Masak: {{ recipe.cook_time }}</div>
+          <div class="meta-chip">🍱 Porsi: {{ recipe.servings }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Segmented Control Tabs (Bahan vs Mode Masak) -->
+    <div class="view-mode-tabs">
+      <button class="tab-btn active" id="tab-ingredients" onclick="switchTab('ingredients')">
+        🥗 Bahan & Takaran
+      </button>
+      <button class="tab-btn" id="tab-cooking" onclick="switchTab('cooking')">
+        👨‍🍳 Mode Masak (Fokus 1 Tangan)
+      </button>
+    </div>
+
+    <!-- Section 1: Ingredients Checklist -->
+    <section id="section-ingredients">
+      <p style="font-size: 0.85rem; color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px; padding: 0 4px;">
+        💡 Ketuk bahan untuk menandai (checklist) saat menyiapkan belanjaan atau racikan.
+      </p>
+
+      {% for group in recipe.ingredient_groups %}
+        <div class="group-title">
+          <span>📦 {{ group.name }}</span>
+        </div>
+        {% for item in group.items %}
+          <div class="ingredient-card" onclick="toggleIngredient(this)">
+            <div class="ing-left">
+              <div class="custom-checkbox"></div>
+              <div>
+                <div class="ing-title">{{ item.item }}</div>
+                {% if item.notes %}
+                  <div class="ing-notes">{{ item.notes }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="ing-qty">{{ item.amount }} {{ item.unit }}</div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+      
+      <div style="margin-top: 24px; text-align: center;">
+        <button class="btn-nav-onehand btn-next" style="width: 100%;" onclick="switchTab('cooking')">
+          Mulai Memasak Sekarang ➔
+        </button>
+      </div>
+    </section>
+
+    <!-- Section 2: Cooking Mode (One-Handed Focus Steps) -->
+    <section id="section-cooking" style="display: none;">
+      
+      <!-- Progress Bar -->
+      <div class="step-progress-bar">
+        <div class="step-progress-fill" id="step-progress"></div>
+      </div>
+
+      {% for step in recipe.instructions %}
+        <div class="cook-step-card-wrapper" id="step-wrapper-{{ loop.index0 }}" style="{% if not loop.first %}display: none;{% endif %}">
+          <div class="cook-step-card">
+            <div>
+              <span class="step-badge">Langkah {{ step.step_number }} dari {{ recipe.instructions|length }}</span>
+              <h3 class="step-heading">{{ step.title }}</h3>
+              <p class="step-detail">{{ step.detail }}</p>
+            </div>
+
+            {% if step.timer_seconds > 0 %}
+              <div class="step-timer-box">
+                <div>
+                  <div style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase;">⏱ Timer Masak</div>
+                  <div class="timer-time" id="display-timer-{{ step.id }}">
+                    {{ "%02d:%02d"|format(step.timer_seconds // 60, step.timer_seconds % 60) }}
+                  </div>
+                </div>
+                <button class="btn-timer" id="btn-timer-{{ step.id }}" onclick="startTimer('{{ step.id }}', {{ step.timer_seconds }})">
+                  ▶ Mulai
+                </button>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+
+      <div style="margin-top: 16px; text-align: center; color: var(--md-sys-color-on-surface-variant); font-size: 0.85rem;">
+        👈 Geser (swipe) kiri/kanan atau gunakan tombol besar di bawah untuk navigasi 1 tangan 👉
+      </div>
+    </section>
+
+  </main>
+
+  <!-- One-Handed Bottom Action Bar (Fixed at Thumb Zone) -->
+  <footer class="one-hand-bottom-bar" id="bottom-bar" style="display: none;">
+    <button class="btn-nav-onehand btn-prev" id="btn-prev" onclick="prevStep()" disabled>
+      ◀ Balik
+    </button>
+    <button class="btn-nav-onehand btn-next" id="btn-next" onclick="nextStep()">
+      Langkah Berikutnya ➔
+    </button>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
