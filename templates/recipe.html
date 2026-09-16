@@ -24,6 +24,16 @@
       </div>
       <h1>Buku Resep</h1>
     </div>
+    <!-- Recipe Selector Dropdown / Sheet Trigger -->
+    <div class="recipe-selector-wrapper">
+      <select class="recipe-select-dropdown" onchange="location.href='/recipe/' + this.value">
+        {% for r in all_recipes %}
+          <option value="{{ r.slug }}" {% if r.slug == recipe.slug %}selected{% endif %}>
+            {{ r.title }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
   </header>
 
   <main class="container">
@@ -163,6 +173,9 @@
   <footer class="one-hand-bottom-bar" id="bottom-bar" style="display: none;">
     <div class="bottom-bar-wrapper">
       <div class="bottom-action-buttons">
+        <button class="btn-nav-onehand btn-icon-only" onclick="openRecipeDrawer()" title="Pilih Resep">
+          <i data-lucide="book-marked" style="width: 20px; height: 20px;"></i>
+        </button>
         <button class="btn-nav-onehand btn-icon-only" onclick="switchTab('ingredients')" title="Lihat Bahan">
           <i data-lucide="list" style="width: 20px; height: 20px;"></i>
         </button>
@@ -180,6 +193,36 @@
       </div>
     </div>
   </footer>
+
+  <!-- Bottom Sheet / Drawer Daftar Resep -->
+  <div class="recipe-drawer-backdrop" id="drawer-backdrop" onclick="closeRecipeDrawer()"></div>
+  <div class="recipe-drawer-sheet" id="recipe-drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-header">
+      <div style="font-weight: 800; font-size: 1.1rem; color: var(--md-sys-color-on-surface);">Daftar Resep Tersedia</div>
+      <button class="btn-drawer-close" onclick="closeRecipeDrawer()">✕</button>
+    </div>
+    <div class="drawer-list">
+      {% for r in all_recipes %}
+        <a href="/recipe/{{ r.slug }}" class="drawer-recipe-item {% if r.slug == recipe.slug %}active{% endif %}">
+          <div class="drawer-recipe-icon">
+            {% if r.youtube_id %}
+              <i data-lucide="youtube" style="width: 18px; height: 18px; color: #ff0000;"></i>
+            {% else %}
+              <i data-lucide="instagram" style="width: 18px; height: 18px; color: #e1306c;"></i>
+            {% endif %}
+          </div>
+          <div style="flex: 1;">
+            <div class="drawer-recipe-title">{{ r.title }}</div>
+            <div class="drawer-recipe-sub">{{ r.chef }} • {{ r.prep_time }}</div>
+          </div>
+          {% if r.slug == recipe.slug %}
+            <i data-lucide="check" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
 
   <!-- Hidden Video & Canvas for AI Head Tracking -->
   <video id="webcam" autoplay playsinline muted style="position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></video>

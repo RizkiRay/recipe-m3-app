@@ -264,6 +264,17 @@ function triggerHeadGesture(direction) {
   }, 1500);
 }
 
+function openRecipeDrawer() {
+  document.getElementById('drawer-backdrop').classList.add('active');
+  document.getElementById('recipe-drawer').classList.add('active');
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeRecipeDrawer() {
+  document.getElementById('drawer-backdrop').classList.remove('active');
+  document.getElementById('recipe-drawer').classList.remove('active');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   if (window.lucide) lucide.createIcons();
   
