@@ -1,92 +1,75 @@
 :root {
-  /* Material Theme Builder baseline tokens (Tonal palette: Honey / Terracotta warmth) */
-  --md-sys-color-primary: #855300;
+  /* Google Material 3 Warm Amber / Culinary Editorial Palette */
+  --md-sys-color-primary: #8a5100;
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #ffddb6;
-  --md-sys-color-on-primary-container: #2a1800;
-  
-  --md-sys-color-secondary: #705b40;
+  --md-sys-color-primary-container: #ffddb8;
+  --md-sys-color-on-primary-container: #2c1600;
+
+  --md-sys-color-secondary: #715b41;
   --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: #fbdebc;
-  --md-sys-color-on-secondary-container: #271904;
+  --md-sys-color-secondary-container: #feddbd;
+  --md-sys-color-on-secondary-container: #281805;
 
-  --md-sys-color-tertiary: #52643f;
+  --md-sys-color-tertiary: #54643c;
   --md-sys-color-on-tertiary: #ffffff;
-  --md-sys-color-tertiary-container: #d5eabf;
-  --md-sys-color-on-tertiary-container: #111f03;
+  --md-sys-color-tertiary-container: #d7e9b7;
+  --md-sys-color-on-tertiary-container: #131f03;
 
-  --md-sys-color-background: #fdf8f4;
-  --md-sys-color-on-background: #1f1b16;
-  --md-sys-color-surface: #fdf8f4;
-  --md-sys-color-on-surface: #1f1b16;
-  
-  --md-sys-color-surface-dim: #dfd9d3;
-  --md-sys-color-surface-bright: #fdf8f4;
+  --md-sys-color-surface: #fff8f5;
+  --md-sys-color-on-surface: #211a14;
+  --md-sys-color-surface-dim: #e4d8cf;
+  --md-sys-color-surface-bright: #fff8f5;
   --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #f8f2ec;
-  --md-sys-color-surface-container: #f2ede7;
-  --md-sys-color-surface-container-high: #ede7e1;
-  --md-sys-color-surface-container-highest: #e7e1dc;
+  --md-sys-color-surface-container-low: #fdf2e9;
+  --md-sys-color-surface-container: #f7ece2;
+  --md-sys-color-surface-container-high: #f1e6dc;
+  --md-sys-color-surface-container-highest: #ebe0d7;
 
-  --md-sys-color-on-surface-variant: #4f4539;
-  --md-sys-color-outline: #817567;
-  --md-sys-color-outline-variant: #d3c4b4;
+  --md-sys-color-on-surface-variant: #50453a;
+  --md-sys-color-outline: #837568;
+  --md-sys-color-outline-variant: #d5c4b5;
 
-  /* Typography tokens */
-  --md-sys-typescale-display-large: 400 3.5rem/4rem 'Google Sans Text', Roboto, system-ui, sans-serif;
-  --md-sys-typescale-headline-medium: 500 1.75rem/2.25rem 'Google Sans Text', Roboto, system-ui, sans-serif;
-  --md-sys-typescale-title-large: 500 1.375rem/1.75rem 'Google Sans Text', Roboto, system-ui, sans-serif;
-  --md-sys-typescale-title-medium: 500 1rem/1.5rem 'Google Sans Text', Roboto, system-ui, sans-serif;
-  --md-sys-typescale-body-large: 400 1.125rem/1.75rem 'Google Sans Text', Roboto, system-ui, sans-serif;
-  --md-sys-typescale-body-medium: 400 1rem/1.5rem 'Google Sans Text', Roboto, system-ui, sans-serif;
-  --md-sys-typescale-label-large: 600 1rem/1.25rem 'Google Sans Text', Roboto, system-ui, sans-serif;
-
-  /* Shape tokens */
   --md-sys-shape-corner-small: 8px;
   --md-sys-shape-corner-medium: 12px;
   --md-sys-shape-corner-large: 16px;
-  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-large: 24px;
   --md-sys-shape-corner-full: 9999px;
 
-  /* Shadows */
-  --md-sys-elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
-  --md-sys-elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
-  --md-sys-elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.30);
+  --md-sys-elevation-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.06);
+  --md-sys-elevation-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.06);
+  --md-sys-elevation-3: 0px 4px 8px 3px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --md-sys-color-primary: #ffb95c;
-    --md-sys-color-on-primary: #472a00;
-    --md-sys-color-primary-container: #653e00;
-    --md-sys-color-on-primary-container: #ffddb6;
+    --md-sys-color-primary: #ffb869;
+    --md-sys-color-on-primary: #4a2800;
+    --md-sys-color-primary-container: #683c00;
+    --md-sys-color-on-primary-container: #ffddb8;
 
-    --md-sys-color-secondary: #dec2a2;
-    --md-sys-color-on-secondary: #3e2d16;
-    --md-sys-color-secondary-container: #56432b;
-    --md-sys-color-on-secondary-container: #fbdebc;
+    --md-sys-color-secondary: #dfc1a2;
+    --md-sys-color-on-secondary: #3f2d17;
+    --md-sys-color-secondary-container: #58432b;
+    --md-sys-color-on-secondary-container: #feddbd;
 
-    --md-sys-color-tertiary: #b9cd05;
-    --md-sys-color-on-tertiary: #263515;
-    --md-sys-color-tertiary-container: #3c4c2a;
-    --md-sys-color-on-tertiary-container: #d5eabf;
+    --md-sys-color-tertiary: #bbcd9d;
+    --md-sys-color-on-tertiary: #273512;
+    --md-sys-color-tertiary-container: #3d4c26;
+    --md-sys-color-on-tertiary-container: #d7e9b7;
 
-    --md-sys-color-background: #17130e;
-    --md-sys-color-on-background: #e7e1dc;
-    --md-sys-color-surface: #17130e;
-    --md-sys-color-on-surface: #e7e1dc;
+    --md-sys-color-surface: #19120c;
+    --md-sys-color-on-surface: #ede0d7;
+    --md-sys-color-surface-dim: #19120c;
+    --md-sys-color-surface-bright: #403831;
+    --md-sys-color-surface-container-lowest: #130d08;
+    --md-sys-color-surface-container-low: #211a14;
+    --md-sys-color-surface-container: #261e18;
+    --md-sys-color-surface-container-high: #312822;
+    --md-sys-color-surface-container-highest: #3c332c;
 
-    --md-sys-color-surface-dim: #17130e;
-    --md-sys-color-surface-bright: #3e3833;
-    --md-sys-color-surface-container-lowest: #120e09;
-    --md-sys-color-surface-container-low: #1f1b16;
-    --md-sys-color-surface-container: #231f1a;
-    --md-sys-color-surface-container-high: #2e2924;
-    --md-sys-color-surface-container-highest: #39342e;
-
-    --md-sys-color-on-surface-variant: #d3c4b4;
-    --md-sys-color-outline: #9c8e80;
-    --md-sys-color-outline-variant: #4f4539;
+    --md-sys-color-on-surface-variant: #d5c4b5;
+    --md-sys-color-outline: #9d8e81;
+    --md-sys-color-outline-variant: #50453a;
   }
 }
 
@@ -98,12 +81,28 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: var(--md-sys-color-background);
-  color: var(--md-sys-color-on-background);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
   line-height: 1.5;
-  padding-bottom: 90px;
-  user-select: none;
+  padding-bottom: 85px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 /* App Bar */
@@ -111,32 +110,41 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--md-sys-color-surface-container);
-  padding: 12px 16px;
+  background: var(--md-sys-color-surface);
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
-.top-app-bar h1 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--md-sys-color-on-surface);
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.app-badge {
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-small);
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: var(--md-sys-shape-corner-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-app-bar h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--md-sys-color-on-surface);
 }
 
 /* Container */
 .container {
-  max-width: 680px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 16px;
 }
@@ -144,16 +152,17 @@ body {
 /* Video Player Card */
 .video-card {
   background: var(--md-sys-color-surface-container-low);
-  border-radius: var(--md-sys-shape-corner-large);
+  border-radius: var(--md-sys-shape-corner-extra-large);
   overflow: hidden;
   margin-bottom: 20px;
-  box-shadow: var(--md-sys-elevation-1);
+  border: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .video-wrapper {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 ratio */
+  padding-bottom: 56.25%;
   height: 0;
+  background: #000;
 }
 
 .video-wrapper iframe {
@@ -166,57 +175,87 @@ body {
 }
 
 .recipe-header-card {
-  padding: 16px;
+  padding: 18px 20px;
 }
 
 .recipe-title {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--md-sys-color-on-surface);
-  margin-bottom: 6px;
+  line-height: 1.25;
+  margin-bottom: 4px;
 }
 
 .recipe-chef {
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: var(--md-sys-color-primary);
   font-weight: 600;
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.recipe-desc {
+  font-size: 0.9rem;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.5;
+  margin-bottom: 16px;
 }
 
 .recipe-meta-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 
 .meta-chip {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  background: var(--md-sys-color-surface-container-highest);
-  padding: 6px 12px;
+  justify-content: center;
+  text-align: center;
+  background: var(--md-sys-color-surface-container);
+  padding: 10px 8px;
   border-radius: var(--md-sys-shape-corner-medium);
-  font-size: 0.85rem;
-  font-weight: 500;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  gap: 4px;
 }
 
-/* Segmented Control / Tabs (Large Touch Target) */
+.meta-chip .material-symbols-outlined {
+  font-size: 18px;
+  color: var(--md-sys-color-primary);
+}
+
+.meta-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--md-sys-color-outline);
+  letter-spacing: 0.04em;
+}
+
+.meta-value {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Clean Segmented Control Tabs */
 .view-mode-tabs {
   display: flex;
   background: var(--md-sys-color-surface-container-high);
   border-radius: var(--md-sys-shape-corner-full);
-  padding: 4px;
+  padding: 3px;
   margin-bottom: 20px;
-  position: sticky;
-  top: 60px;
-  z-index: 40;
-  box-shadow: var(--md-sys-elevation-1);
+  border: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .tab-btn {
   flex: 1;
-  padding: 8px 12px;
-  font-size: 0.88rem;
+  padding: 9px 14px;
+  font-size: 0.85rem;
   font-weight: 600;
   text-align: center;
   border: none;
@@ -224,8 +263,11 @@ body {
   color: var(--md-sys-color-on-surface-variant);
   border-radius: var(--md-sys-shape-corner-full);
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 40px;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .tab-btn.active {
@@ -234,34 +276,36 @@ body {
   box-shadow: var(--md-sys-elevation-1);
 }
 
-/* Ingredients Section */
+/* Ingredients Clean List */
 .group-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin: 20px 0 10px 4px;
-  color: var(--md-sys-color-on-surface);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 24px 0 10px 4px;
+  color: var(--md-sys-color-outline);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .ingredient-card {
-  background: var(--md-sys-color-surface-container-low);
-  border-radius: var(--md-sys-shape-corner-large);
-  margin-bottom: 10px;
-  padding: 14px 16px;
+  background: var(--md-sys-color-surface-container-lowest);
+  border-radius: var(--md-sys-shape-corner-medium);
+  margin-bottom: 8px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  transition: all 0.2s;
-  min-height: 56px;
+  transition: all 0.15s ease;
   border: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .ingredient-card.checked {
-  background: var(--md-sys-color-surface-container-highest);
-  opacity: 0.6;
+  background: var(--md-sys-color-surface-container);
+  opacity: 0.55;
+  border-color: transparent;
 }
 
 .ingredient-card.checked .ing-title {
@@ -275,93 +319,90 @@ body {
 }
 
 .custom-checkbox {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 6px;
-  border: 2px solid var(--md-sys-color-primary);
+  border: 2px solid var(--md-sys-color-outline);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: all 0.2s;
 }
 
 .ingredient-card.checked .custom-checkbox {
   background: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
 }
 
 .ing-title {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--md-sys-color-on-surface);
 }
 
 .ing-notes {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .ing-qty {
-  font-size: 1.1rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--md-sys-color-primary);
   white-space: nowrap;
-  padding-left: 12px;
+  padding-left: 8px;
 }
 
-/* Focus Cook Mode (Single Step Card for One-Handed Cooking) */
-.step-container {
-  display: none;
-}
-
-.step-container.active {
-  display: block;
-}
-
+/* Focus Cook Mode - Hero Card */
 .cook-step-card {
   background: var(--md-sys-color-surface-container-lowest);
   border-radius: var(--md-sys-shape-corner-extra-large);
   padding: 24px 20px;
-  border: 2px solid var(--md-sys-color-primary-container);
-  box-shadow: var(--md-sys-elevation-2);
-  min-height: 320px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  box-shadow: var(--md-sys-elevation-1);
+  min-height: 280px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .step-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
-  font-size: 0.95rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  padding: 6px 14px;
+  padding: 4px 10px;
   border-radius: var(--md-sys-shape-corner-full);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .step-heading {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--md-sys-color-on-surface);
   margin-bottom: 12px;
   line-height: 1.3;
 }
 
 .step-detail {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   line-height: 1.6;
   color: var(--md-sys-color-on-surface);
   margin-bottom: 20px;
 }
 
-/* Timer in Step Card */
+/* Timer Widget inside Step */
 .step-timer-box {
   background: var(--md-sys-color-tertiary-container);
   color: var(--md-sys-color-on-tertiary-container);
   border-radius: var(--md-sys-shape-corner-large);
-  padding: 14px 16px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -369,9 +410,9 @@ body {
 }
 
 .timer-time {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  font-family: monospace;
+  font-family: 'SF Mono', Monaco, monospace;
 }
 
 .btn-timer {
@@ -380,13 +421,31 @@ body {
   border: none;
   padding: 8px 16px;
   border-radius: var(--md-sys-shape-corner-full);
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.85rem;
   cursor: pointer;
-  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* One-Handed Bottom Action Bar (Thumb Zone) */
+/* Step Progress Indicator */
+.step-progress-bar {
+  height: 4px;
+  background: var(--md-sys-color-surface-container-highest);
+  border-radius: 2px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.step-progress-fill {
+  height: 100%;
+  background: var(--md-sys-color-primary);
+  width: 12.5%;
+  transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* One-Handed Floating Bottom Action Bar */
 .one-hand-bottom-bar {
   position: fixed;
   bottom: 0;
@@ -395,12 +454,12 @@ body {
   z-index: 100;
   background: var(--md-sys-color-surface-container);
   border-top: 1px solid var(--md-sys-color-outline-variant);
-  padding: 6px 12px calc(6px + env(safe-area-inset-bottom));
-  box-shadow: var(--md-sys-elevation-3);
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  box-shadow: var(--md-sys-elevation-2);
 }
 
 .bottom-bar-wrapper {
-  max-width: 680px;
+  max-width: 640px;
   margin: 0 auto;
 }
 
@@ -411,25 +470,24 @@ body {
 }
 
 .btn-nav-onehand {
-  height: 42px;
+  height: 44px;
   border-radius: var(--md-sys-shape-corner-full);
   border: none;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: all 0.15s ease;
 }
 
 .btn-icon-only {
-  width: 42px;
-  flex: 0 0 42px;
+  width: 44px;
+  flex: 0 0 44px;
   background: var(--md-sys-color-surface-container-highest);
   color: var(--md-sys-color-on-surface);
-  font-size: 1.1rem;
   padding: 0;
 }
 
@@ -451,103 +509,5 @@ body {
 }
 
 .btn-nav-onehand:active {
-  transform: scale(0.97);
-}
-
-.btn-prev {
-  background: var(--md-sys-color-surface-container-highest);
-  color: var(--md-sys-color-on-surface);
-  flex: 0.8;
-}
-
-.btn-next {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  flex: 1.2;
-}
-
-.btn-full-list {
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-  flex: 1;
-}
-
-/* Camera Gesture Control */
-.camera-control-card {
-  background: var(--md-sys-color-surface-container-low);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-large);
-  padding: 12px 14px;
-  margin-bottom: 16px;
-}
-
-.cam-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.cam-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cam-icon {
-  font-size: 1.3rem;
-}
-
-.btn-cam-toggle {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  border: none;
-  padding: 6px 12px;
-  border-radius: var(--md-sys-shape-corner-full);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-#cam-preview-container {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-#webcam {
-  width: 90px;
-  height: 68px;
-  object-fit: cover;
-  border-radius: var(--md-sys-shape-corner-medium);
-  transform: scaleX(-1); /* mirror */
-  border: 2px solid var(--md-sys-color-primary);
-}
-
-.gesture-indicator {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--md-sys-color-primary);
-  background: var(--md-sys-color-surface-container-highest);
-  padding: 6px 12px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  flex: 1;
-}
-
-/* Step Progress Indicator */
-.step-progress-bar {
-  height: 6px;
-  background: var(--md-sys-color-surface-container-highest);
-  border-radius: 3px;
-  margin-bottom: 16px;
-  overflow: hidden;
-}
-
-.step-progress-fill {
-  height: 100%;
-  background: var(--md-sys-color-primary);
-  width: 12.5%;
-  transition: width 0.3s ease;
+  transform: scale(0.96);
 }

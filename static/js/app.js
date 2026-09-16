@@ -32,11 +32,9 @@ function switchTab(tab) {
 
 function toggleIngredient(card) {
   card.classList.toggle('checked');
-  const checkbox = card.querySelector('.custom-checkbox');
-  if (card.classList.contains('checked')) {
-    checkbox.innerHTML = '✓';
-  } else {
-    checkbox.innerHTML = '';
+  const checkIcon = card.querySelector('.custom-checkbox .material-symbols-outlined');
+  if (checkIcon) {
+    checkIcon.style.display = card.classList.contains('checked') ? 'inline-block' : 'none';
   }
 }
 
@@ -65,11 +63,11 @@ function renderStep(idx) {
   const btnNext = document.getElementById('btn-next');
   if (btnNext) {
     if (idx === steps.length - 1) {
-      btnNext.innerHTML = '🎉 Selesai!';
+      btnNext.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Selesai';
       btnNext.style.background = 'var(--md-sys-color-tertiary)';
       btnNext.style.color = 'var(--md-sys-color-on-tertiary)';
     } else {
-      btnNext.innerHTML = 'Langkah Berikutnya ➔';
+      btnNext.innerHTML = 'Lanjut <span class="material-symbols-outlined">arrow_forward</span>';
       btnNext.style.background = 'var(--md-sys-color-primary)';
       btnNext.style.color = 'var(--md-sys-color-on-primary)';
     }
@@ -102,7 +100,7 @@ function startTimer(id, initialSeconds) {
     // Pause / Stop
     clearInterval(timers[id].interval);
     timers[id].interval = null;
-    btn.innerHTML = '▶ Mulai';
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">play_arrow</span> Mulai';
     return;
   }
 
@@ -110,7 +108,7 @@ function startTimer(id, initialSeconds) {
     timers[id] = { remaining: initialSeconds, interval: null };
   }
 
-  btn.innerHTML = '⏸ Jeda';
+  btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">pause</span> Jeda';
   
   timers[id].interval = setInterval(() => {
     timers[id].remaining--;
@@ -121,9 +119,9 @@ function startTimer(id, initialSeconds) {
     if (timers[id].remaining <= 0) {
       clearInterval(timers[id].interval);
       timers[id].interval = null;
-      btn.innerHTML = 'Selesai!';
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">done</span> Selesai';
       btn.style.background = 'var(--md-sys-color-primary)';
-      display.textContent = '00:00 - WAKTU HABIS!';
+      display.textContent = '00:00 — SELESAI';
       if ('vibrate' in navigator) navigator.vibrate([300, 100, 300]);
     }
   }, 1000);
@@ -152,12 +150,12 @@ async function toggleCameraGesture() {
     }
     isCameraActive = false;
     sensorBtn.classList.remove('active');
-    sensorIcon.innerText = '🗣️';
+    sensorIcon.innerText = 'face';
     return;
   }
 
   try {
-    sensorIcon.innerText = '⏳';
+    sensorIcon.innerText = 'hourglass_top';
     
     if (!video) {
       video = document.createElement('video');
@@ -195,7 +193,7 @@ async function toggleCameraGesture() {
 
     isCameraActive = true;
     sensorBtn.classList.add('active');
-    sensorIcon.innerText = '🟢';
+    sensorIcon.innerText = 'visibility';
 
     // Process frames directly with requestAnimationFrame
     async function processVideoFrame() {
@@ -211,7 +209,7 @@ async function toggleCameraGesture() {
     console.error('Camera/MediaPipe error:', err);
     alert('Izin kamera diperlukan untuk sensor miring kepala di browser Safari/Chrome.');
     sensorBtn.classList.remove('active');
-    sensorIcon.innerText = '🗣️';
+    sensorIcon.innerText = 'face';
   }
 }
 
@@ -244,7 +242,7 @@ function triggerHeadGesture(direction) {
   gestureCooldown = true;
   const sensorIcon = document.getElementById('sensor-pill-icon');
   if (sensorIcon) {
-    sensorIcon.innerText = direction === 'next' ? '👉' : '👈';
+    sensorIcon.innerText = direction === 'next' ? 'arrow_forward' : 'arrow_back';
   }
 
   if (direction === 'next') {
@@ -257,7 +255,7 @@ function triggerHeadGesture(direction) {
   setTimeout(() => {
     gestureCooldown = false;
     if (sensorIcon && isCameraActive) {
-      sensorIcon.innerText = '🟢';
+      sensorIcon.innerText = 'visibility';
     }
   }, 1500);
 }
