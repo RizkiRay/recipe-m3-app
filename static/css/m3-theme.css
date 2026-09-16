@@ -449,26 +449,26 @@ body {
   z-index: 100;
   background: var(--md-sys-color-surface-container);
   border-top: 1px solid var(--md-sys-color-outline-variant);
-  padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
   box-shadow: var(--md-sys-elevation-2);
 }
 
 .bottom-bar-wrapper {
-  max-width: 640px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .bottom-action-buttons {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
 }
 
 .btn-nav-onehand {
-  height: 44px;
-  border-radius: var(--md-sys-shape-corner-full);
+  height: 48px;
+  border-radius: var(--md-sys-shape-corner-medium);
   border: none;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -479,8 +479,8 @@ body {
 }
 
 .btn-icon-only {
-  width: 44px;
-  flex: 0 0 44px;
+  width: 48px;
+  flex: 0 0 48px;
   background: var(--md-sys-color-surface-container-highest);
   color: var(--md-sys-color-on-surface);
   padding: 0;
@@ -500,7 +500,7 @@ body {
 .btn-next {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
-  flex: 1.5;
+  flex: 2;
 }
 
 .btn-nav-onehand:active {
