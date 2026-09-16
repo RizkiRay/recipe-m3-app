@@ -500,7 +500,7 @@ body {
 .btn-next {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
-  flex: 2;
+  flex: 1;
 }
 
 .btn-nav-onehand:active {
