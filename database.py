@@ -59,7 +59,7 @@ def init_db():
     )
     """)
 
-    recipes_seed = [
+    all_16_recipes = [
         {
             "slug": "egg-chicken-roll-hokben",
             "title": "Egg Chicken Roll ala HokBen",
@@ -442,32 +442,225 @@ def init_db():
                 (5, "Marinasi Telur", "Rendam telur kupas dalam larutan tare shoyu dingin di wadah tertutup. Simpan di kulkas minimal 4 jam (ideal semalaman) hingga bumbu meresap kecokelatan.", 0),
                 (6, "Racik Kuah Ramen", "Untuk menyajikan semangkuk ramen: tuang 2-3 sdm Shoyu Tare ke dasar mangkuk, siram dengan 300 ml kaldu ayam/sapi panas, masukkan mie ramen, dan belah telur Ajitama di atasnya!", 0)
             ]
+        },
+        {
+            "slug": "velveting-chicken-stir-fry",
+            "title": "Classic Velveting Method: Rahasia Ayam & Ikan Stir-Fry Empuk",
+            "chef": "@sometimesdancooks",
+            "description": "Teknik restoran Tiongkok untuk mengempukkan dada ayam & ikan agar tetap juicy lembut dan saus menempel sempurna tanpa rasa lembek baking soda.",
+            "youtube_id": "",
+            "media_url": "https://www.instagram.com/reel/DcOFmSVT0FF/",
+            "servings": "2-3 Porsi Stir Fry",
+            "prep_time": "10 menit",
+            "cook_time": "1 menit blanching + 5 menit tumis",
+            "calories": "Pro Chinese Restaurant Technique",
+            "groups": [
+                ("Bahan Utama & Velveting Coating", [
+                    ("Dada Ayam / Fillet Ikan (Iris tipis)", "300", "gr", "Potong seragam"),
+                    ("Tepung Maizena (Cornstarch)", "1.5", "sdm", "Membentuk lapisan pelindung kelembapan"),
+                    ("Putih Telur", "1", "butir", "Mengikat sari daging"),
+                    ("Minyak Sayur Netral", "1", "sdt", "Mencegah daging saling menempel"),
+                    ("Garam & Lada Putih", "secukupnya", "", "")
+                ]),
+                ("Pelengkap Tumisan (Stir-Fry)", [
+                    ("Bawang Putih (Cincang)", "3", "siung", ""),
+                    ("Saus Tiram & Kecap Asin", "1.5", "sdm", ""),
+                    ("Sayuran (Brokoli/Paprika/Jamur)", "150", "gr", "")
+                ])
+            ],
+            "steps": [
+                (1, "Iris & Lapisi Daging", "Keringkan irisan daging ayam. Masukkan tepung maizena, putih telur, minyak netral, garam, dan lada. Aduk rata hingga seluruh permukaan daging terbalut lapisan tipis mengkilap.", 0),
+                (2, "Water Blanching Cepat (30 Detik)", "Didihkan air dalam panci (atau minyak panas di wajan). Masukkan irisan ayam, masak singkat selama 30-45 detik hingga lapisan luar mengeras putih tapi dalam masih juicy. Tiriskan segera.", 45),
+                (3, "Tumis Bumbu & Sayuran", "Panaskan wajan wok dengan 1 sdm minyak. Tumis bawang putih cincang dan sayuran pilihan dengan api besar hingga harum dan renyah.", 120),
+                (4, "Masukkan Ayam Velvet & Saus", "Masukkan ayam yang sudah diblanching ke dalam wajan. Tuang saus tiram dan kecap asin. Aduk cepat 1-2 menit hingga saus mengental menempel sempurna pada lapisan maizena ayam.", 120),
+                (5, "Sajikan Panas", "Angkat dan sajikan ayam stir-fry super lembut dan juicy selagi hangat!", 0)
+            ]
+        },
+        {
+            "slug": "grilled-squid-and-peas-mediterranean",
+            "title": "Grilled Squid and Peas with Aioli (Mediterranean Style)",
+            "chef": "Jesse Jenkins (@adip_food / @octobre_editions)",
+            "description": "Cumi bakar mediterania yang segar dengan kacang polong panggang, kentang rebus, mint, dan saus aioli gurih segar.",
+            "youtube_id": "",
+            "media_url": "https://www.instagram.com/reel/Dbuv21JM-T6/",
+            "servings": "2 Porsi",
+            "prep_time": "15 menit",
+            "cook_time": "10 menit memanggang",
+            "calories": "Fresh Mediterranean Seafood",
+            "groups": [
+                ("Bahan Utama Cumi & Sayur", [
+                    ("Baby Squid / Cumi Segar (Bersihkan)", "400", "gr", "Utuh atau kerat-kerat"),
+                    ("Kacang Polong Segar (Green Peas / Broad Beans)", "150", "gr", ""),
+                    ("Baby Potatoes (Rebus matang empuk)", "200", "gr", "Belah dua"),
+                    ("Daun Mint Segar (Cincang kasar)", "1", "genggam", "Aroma segar Mediterania"),
+                    ("Cabai Merah Segar (Cincang halus)", "1", "buah", "")
+                ]),
+                ("Bumbu Perendam & Dressing", [
+                    ("Extra Virgin Olive Oil", "3-4", "sdm", "Gunakan kualitas terbaik"),
+                    ("Jeruk Lemon Segar", "1", "buah", "Kupas bulir buahnya + ambil air perasannya"),
+                    ("Garam Laut (Sea Salt) & Lada Hitam", "secukupnya", "", ""),
+                    ("Saus Aioli (Mayones Bawang Putih)", "4", "sdm", "Alas dasar piring saji")
+                ])
+            ],
+            "steps": [
+                (1, "Bakar Cumi di Atas Api Terbuka", "Panaskan griddle pan sangat panas atau panggangan arang. Panggang baby squid di atas api besar selama 2-3 menit hingga harum gosong manis (smoky char) dan kenyal matang.", 180),
+                (2, "Panggang Kacang Polong", "Panggang kacang polong sebentar di wadah grill basket atau pan panas hingga ada bercak kecokelatan.", 120),
+                (3, "Bumbui Cumi Langsung Saat Panas", "Saat cumi baru diangkat dari api panas, segera siram dengan banyak minyak zaitun extra virgin, air lemon, dan garam laut agar rasa meresap ke dalam pori-pori panasnya.", 0),
+                (4, "Campur Salad Mediterania", "Campurkan cumi bakar dengan kacang polong panggang, kentang rebus, irisan cabai, daun mint cincang, dan bulir lemon kupas.", 0),
+                (5, "Plating dengan Aioli", "Oleskan saus aioli lembut di dasar piring saji. Tata cumi panggang dan salad kentang mint di atasnya. Sajikan segera selagi hangat!", 0)
+            ]
+        },
+        {
+            "slug": "hainan-chicken-jelly-rd",
+            "title": "Hainan Chicken with Natural Aromatic Jelly (R&D Episode)",
+            "chef": "@hwoo.lee",
+            "description": "Teknik poaching ayam Hainan untuk menghasilkan lapisan jelly kaldu kolagen alami yang dingin, gurih, dan kenyal di bawah kulit ayam.",
+            "youtube_id": "",
+            "media_url": "https://www.instagram.com/reel/Da4cX71JEeN/",
+            "servings": "3-4 Porsi",
+            "prep_time": "20 menit",
+            "cook_time": "40 menit poaching + chilling",
+            "calories": "Mastery Hainanese Poached Chicken",
+            "groups": [
+                ("Bahan Ayam & Kaldu Poaching", [
+                    ("Ayam Utuh Segar (Kualitas baik)", "1", "ekor (±1.2 kg)", "Bersihkan rongga dalam"),
+                    ("Jahe Segar (Memarkan)", "50", "gr", ""),
+                    ("Daun Bawang", "3", "batang", "Ikat simpul"),
+                    ("Bawang Putih", "6", "siung", "Memarkan"),
+                    ("Minyak Wijen & Garam", "secukupnya", "", "")
+                ]),
+                ("Bahan Ice Bath (Pembentuk Jelly)", [
+                    ("Es Batu Melimpah + Air Dingin", "1", "baskom besar", "Menghentikan pematangan & mengunci kolagen jelly")
+                ])
+            ],
+            "steps": [
+                (1, "Siapkan Rongga Ayam & Air Kaldu", "Masukkan jahe, daun bawang, dan bawang putih ke dalam rongga perut ayam. Didihkan air kaldu di panci besar dengan garam.", 0),
+                (2, "Submerge & Poach Lembut", "Celupkan ayam 3 kali ke air mendidih agar suhu luar-dalam seimbang, lalu rendam seluruh badan ayam. Masak dengan api sangat kecil (simmering 85°C) selama 35-40 menit hingga matang lembut.", 2400),
+                (3, "Kejut Air Es (Thermal Shock)", "Segera angkat ayam panas dan cemplungkan ke dalam baskom air es selama 15 menit. Penurunan suhu drastis ini mengunci kolagen di bawah kulit menjadi lapisan jelly transparan alami.", 900),
+                (4, "Oles Minyak Wijen & Potong", "Angkat ayam dingin, olesi kulitnya dengan minyak wijen murni. Potong rapi dan nikmati tekstur kulit kenyal dengan lapisan jelly gurih alami khas Hainan!", 0)
+            ]
+        },
+        {
+            "slug": "vietnamese-beef-pho-slow-broth",
+            "title": "Vietnamese Beef Pho with Aromatic Spices",
+            "chef": "@mbakaleta",
+            "description": "Semangkuk mie Pho Vietnam hangat dengan kaldu sapi rempah (kapulaga arab, pekak, kayu manis) yang wangi semerbak.",
+            "youtube_id": "",
+            "media_url": "https://www.instagram.com/reel/Db3IKQ4Bi75/",
+            "servings": "4 Porsi",
+            "prep_time": "25 menit",
+            "cook_time": "60 menit simmer kaldu",
+            "calories": "Comforting Vietnamese Noodle Soup",
+            "groups": [
+                ("Bahan Kuah Kaldu Sapi Rempah", [
+                    ("Tulang Sapi / Daging Sengkel Sapi", "750", "gr", "Rebus buang buih darah pertama"),
+                    ("Kapulaga Arab (Green Cardamom)", "5", "butir", "Sangrai"),
+                    ("Bunga Lawang / Star Anise", "3", "buah", "Sangrai"),
+                    ("Kayu Manis Batang", "1", "batang", "Sangrai"),
+                    ("Biji Ketumbar & Cengkih", "1", "sdt", "Sangrai"),
+                    ("Bawang Bombay & Jahe (Bakar hingga gosong)", "1", "buah", "Kunci kuah bening manis gurih"),
+                    ("Kecap Ikan (Fish Sauce) & Gula Batu", "secukupnya", "", "")
+                ]),
+                ("Isian Mie & Pelengkap Pho", [
+                    ("Mie Pho (Beras Vietnam) / Kwetiau Beras", "400", "gr", "Seduh air panas"),
+                    ("Daging Sapi Iris Tipis (Sirloin/Tenderloin)", "200", "gr", "Taruh mentah disiram kuah panas"),
+                    ("Bakso Sapi Urat", "8", "butir", ""),
+                    ("Tauge Segar, Daun Ketumbar, Jeruk Nipis, Cabe Rawit", "secukupnya", "", "")
+                ])
+            ],
+            "steps": [
+                (1, "Bakar Bombay, Jahe & Sangrai Rempah", "Bakar bawang bombay dan jahe di atas api kompor hingga kulitnya gosong beraroma. Sangrai kapulaga, bunga lawang, kayu manis, dan cengkih di wajan kering hingga harum.", 300),
+                (2, "Rebus Kaldu Bening Sapi", "Rebus tulang sapi dalam air mendidih selama 10 menit, buang air kotor pertama. Isi kembali air bersih, masukkan daging sapi, bombay bakar, jahe bakar, dan kantung rempah sangrai. Simmer api kecil selama 1 jam.", 3600),
+                (3, "Bumbui Kuah Pho", "Bumbui kuah dengan kecap ikan dan gula batu hingga gurih manis seimbang. Masukkan bakso sapi.", 0),
+                (4, "Susun Mangkuk Pho", "Tata mie pho hangat di mangkuk saji, beri irisan daging sapi mentah tipis, bakso sapi, dan tauge segar.", 0),
+                (5, "Siram Kuah Mendidih & Nikmati", "Siramkan kuah kaldu sapi panas mendidih langsung ke atas irisan daging sapi hingga matang seketika. Beri perasan jeruk nipis, daun ketumbar, dan irisan cabe rawit segar!", 0)
+            ]
+        },
+        {
+            "slug": "wet-brining-dada-ayam-empuk",
+            "title": "Teknik Wet Brining Dada Ayam (Anti Kering & Seret)",
+            "chef": "@edmareta",
+            "description": "Rahasia merendam dada ayam dalam larutan garam cair (wet brine) semalaman agar daging empuk, gurih meresap, dan tidak seret saat digoreng/airfryer.",
+            "youtube_id": "",
+            "media_url": "https://www.instagram.com/reel/Db15nqQSma9/",
+            "servings": "Untuk 1.5 kg Daging Ayam",
+            "prep_time": "5 menit",
+            "cook_time": "Istirahat chiller semalaman",
+            "calories": "Juicy Poultry Preparation Technique",
+            "groups": [
+                ("Bahan Larutan Wet Brining", [
+                    ("Dada Ayam / Ayam Utuh Potong", "1.5", "kg", "Bebas lemak berlebih"),
+                    ("Air Matang Hangat", "1.5", "liter", "Untuk melarutkan garam"),
+                    ("Garam Dapur", "2-3", "sdm (±45 gr)", "Kunci tekanan osmosis protein"),
+                    ("Gula Pasir", "1.5", "sdm", "Menyeimbangkan rasa asin & melembutkan"),
+                    ("Bawang Putih Bubuk / Utuh Geprek", "4", "siung", "Pengharum"),
+                    ("Kaldu Alami / Kaldu Jamur", "1", "sdm", "Ekstra rasa umami")
+                ])
+            ],
+            "steps": [
+                (1, "Larutkan Garam & Bumbu Brine", "Campurkan garam, gula pasir, bawang putih, dan kaldu ke dalam air hangat. Aduk hingga seluruh butiran garam dan gula larut sempurna, lalu biarkan air mendingin.", 180),
+                (2, "Rendam Daging Ayam", "Masukkan potongan dada ayam ke dalam wadah kedap udara atau toples besar. Tuangkan larutan air garam hingga seluruh bagian ayam terendam sempurna.", 0),
+                (3, "Simpan di Chiller Semalaman", "Tutup rapat wadah, simpan di dalam kulkas (chiller) minimal 6-8 jam (atau dari malam hingga pagi). Proses osmosis akan menarik kelembapan dan rasa asin gurih meresap rata ke serat terdalam daging.", 0),
+                (4, "Tiriskan & Siap Diolah", "Keluarkan ayam dari kulkas, buang air rendamannya (tidak perlu dicuci garam lagi). Daging ayam kini super empuk dan siap digoreng krispi, dipanggang, dibakar, atau dimasukkan ke airfryer tanpa takut seret!", 0)
+            ]
+        },
+        {
+            "slug": "crispy-chicken-cutlet-cornstarch-hack",
+            "title": "Crispy Chicken Cutlet: Cornstarch First Layer Method",
+            "chef": "@themindfulflavors",
+            "description": "Trik pelapis katsu/cutlet ayam agar tepung panir menempel rapat tanpa terlepas saat digoreng: gunakan tepung maizena sebagai lapisan pertama pengunci uap air.",
+            "youtube_id": "",
+            "media_url": "https://www.instagram.com/reel/DcTm03oR0Gc/",
+            "servings": "2 Porsi Cutlet",
+            "prep_time": "10 menit",
+            "cook_time": "8 menit goreng",
+            "calories": "Flawless Japanese/Austrian Cutlet Technique",
+            "groups": [
+                ("Bahan Utama & Breading System", [
+                    ("Dada Ayam Fillet (Belah tipis melebar)", "300", "gr", "Keringkan permukaannya dengan tisu"),
+                    ("Garam, Lada Hitam, Bawang Putih Bubuk", "secukupnya", "", "Bumbu marinasi dasar"),
+                    ("Tepung Maizena (Lapisan 1)", "3", "sdm", "Menyerap kelembapan permukaan & mengunci uap air"),
+                    ("Telur Ayam (Lapisan 2)", "1", "butir", "Kocok lepas"),
+                    ("Tepung Roti Panko / Breadcrumbs (Lapisan 3)", "100", "gr", "Untuk tekstur luar renyah mekar"),
+                    ("Minyak Goreng", "secukupnya", "", "Untuk menggoreng shallow-fry")
+                ])
+            ],
+            "steps": [
+                (1, "Keringkan & Bumbui Dada Ayam", "Keringkan permukaan dada ayam dengan paper towel hingga tidak berair. Taburi garam, lada hitam, dan bawang putih bubuk merata di kedua sisi.", 0),
+                (2, "Balur Lapisan 1 (Tepung Maizena)", "Balurkan ayam ke dalam tepung maizena tipis-tipis, tepuk-tepuk sisa tepung berlebih. Maizena akan menyerap kelembapan saat digoreng dan membentuk gel tipis penahan uap air.", 0),
+                (3, "Celup Lapisan 2 (Telur Kocok)", "Celupkan ayam berbalut maizena ke dalam mangkuk telur kocok hingga seluruh permukaan basah merata.", 0),
+                (4, "Tekan Lapisan 3 (Tepung Panko)", "Pindahkan ayam ke wadah tepung roti panko. Tekan-tekan kuat dengan telapak tangan agar butiran panko tertanam rapat ke lapisan telur.", 0),
+                (5, "Goreng hingga Golden Brown", "Panaskan minyak dengan api sedang (170°C). Goreng ayam selama 3-4 menit tiap sisi hingga berwarna cokelat keemasan renyah. Angkat dan tiriskan di atas cooling rack!", 480)
+            ]
         }
     ]
 
-    for r_data in recipes_seed:
-        cursor.execute("SELECT id FROM recipes WHERE slug = ?", (r_data['slug'],))
-        existing = cursor.fetchone()
-        if not existing:
-            cursor.execute("""
-            INSERT INTO recipes (slug, title, chef, description, youtube_id, media_url, servings, prep_time, cook_time, calories)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                r_data['slug'], r_data['title'], r_data['chef'], r_data['description'],
-                r_data['youtube_id'], r_data['media_url'], r_data['servings'],
-                r_data['prep_time'], r_data['cook_time'], r_data['calories']
-            ))
-            rec_id = cursor.lastrowid
-            
-            for g_idx, (g_name, items) in enumerate(r_data['groups']):
-                cursor.execute("INSERT INTO ingredient_groups (recipe_id, name, sort_order) VALUES (?, ?, ?)", (rec_id, g_name, g_idx))
-                g_id = cursor.lastrowid
-                for i_idx, it in enumerate(items):
-                    cursor.execute("INSERT INTO ingredients (group_id, item, amount, unit, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?)", (g_id, it[0], it[1], it[2], it[3], i_idx))
-            
-            for st in r_data['steps']:
-                cursor.execute("INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds) VALUES (?, ?, ?, ?, ?)", (rec_id, st[0], st[1], st[2], st[3]))
-            print(f"Added recipe: {r_data['title']}")
+    # Clean and re-seed all 16 recipes cleanly
+    cursor.execute("DELETE FROM instructions")
+    cursor.execute("DELETE FROM ingredients")
+    cursor.execute("DELETE FROM ingredient_groups")
+    cursor.execute("DELETE FROM recipes")
+
+    for r_data in all_16_recipes:
+        cursor.execute("""
+        INSERT INTO recipes (slug, title, chef, description, youtube_id, media_url, servings, prep_time, cook_time, calories)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            r_data['slug'], r_data['title'], r_data['chef'], r_data['description'],
+            r_data['youtube_id'], r_data['media_url'], r_data['servings'],
+            r_data['prep_time'], r_data['cook_time'], r_data['calories']
+        ))
+        rec_id = cursor.lastrowid
+        
+        for g_idx, (g_name, items) in enumerate(r_data['groups']):
+            cursor.execute("INSERT INTO ingredient_groups (recipe_id, name, sort_order) VALUES (?, ?, ?)", (rec_id, g_name, g_idx))
+            g_id = cursor.lastrowid
+            for i_idx, it in enumerate(items):
+                cursor.execute("INSERT INTO ingredients (group_id, item, amount, unit, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?)", (g_id, it[0], it[1], it[2], it[3], i_idx))
+        
+        for st in r_data['steps']:
+            cursor.execute("INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds) VALUES (?, ?, ?, ?, ?)", (rec_id, st[0], st[1], st[2], st[3]))
+        print(f"Loaded recipe: {r_data['title']}")
 
     conn.commit()
     conn.close()
