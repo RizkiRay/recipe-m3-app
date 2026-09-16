@@ -208,7 +208,7 @@ body {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 6px 12px;
+  gap: 12px 18px;
   font-size: 0.8rem;
   color: var(--md-sys-color-on-surface-variant);
   padding-top: 10px;
@@ -224,11 +224,6 @@ body {
 
 .meta-item i {
   color: var(--md-sys-color-primary);
-}
-
-.meta-divider {
-  color: var(--md-sys-color-outline-variant);
-  font-weight: normal;
 }
 
 /* Clean Segmented Control Tabs */
