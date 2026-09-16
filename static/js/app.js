@@ -122,12 +122,12 @@ function startTimer(id, initialSeconds) {
 let touchStartX = 0;
 let touchEndX = 0;
 
-// Camera Vision Hand Wave Detection
+// Head Tilt Detection (MediaPipe Face Mesh + Math Roll Angle)
 let cameraStream = null;
 let isCameraActive = false;
-let animationFrameId = null;
-let lastFrameData = null;
 let gestureCooldown = false;
+let faceMesh = null;
+let mpCamera = null;
 
 async function toggleCameraGesture() {
   const btn = document.getElementById('btn-toggle-cam');
@@ -135,131 +135,123 @@ async function toggleCameraGesture() {
   const status = document.getElementById('cam-status');
 
   if (isCameraActive) {
-    // Stop camera
+    if (mpCamera) {
+      mpCamera.stop();
+    }
     if (cameraStream) {
       cameraStream.getTracks().forEach(track => track.stop());
     }
-    if (animationFrameId) cancelAnimationFrame(animationFrameId);
     isCameraActive = false;
-    btn.innerHTML = '📷 Aktifkan Kamera';
+    btn.innerHTML = '📷 Aktifkan Sensor';
     btn.style.background = 'var(--md-sys-color-primary-container)';
     btn.style.color = 'var(--md-sys-color-on-primary-container)';
-    status.innerText = 'Gunakan kamera depan tanpa menyentuh layar';
+    status.innerText = 'Miringkan kepala 45°: Kanan (Berikutnya) / Kiri (Sebelumnya)';
     return;
   }
 
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } },
-      audio: false
+    btn.innerHTML = '⏳ Menyiapkan AI...';
+    
+    faceMesh = new FaceMesh({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
     });
-    cameraStream = stream;
-    video.srcObject = stream;
-    await video.play();
+
+    faceMesh.setOptions({
+      maxNumFaces: 1,
+      refineLandmarks: false,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5
+    });
+
+    faceMesh.onResults(onFaceResults);
+
+    mpCamera = new Camera(video, {
+      onFrame: async () => {
+        if (isCameraActive) {
+          await faceMesh.send({ image: video });
+        }
+      },
+      width: 320,
+      height: 240,
+      facingMode: 'user'
+    });
+
+    await mpCamera.start();
     isCameraActive = true;
-    btn.innerHTML = '🛑 Matikan Kamera';
+    btn.innerHTML = '🛑 Matikan Sensor';
     btn.style.background = 'var(--md-sys-color-error, #ba1a1a)';
     btn.style.color = '#ffffff';
-    status.innerText = 'Aktif: Lambaikan tangan ke KIRI (Berikutnya) / KANAN (Balik)';
-
-    startMotionDetection();
+    status.innerText = 'Sensor Aktif: Miringkan kepala ±45° ke Kiri / Kanan';
   } catch (err) {
-    console.error('Camera access error:', err);
-    alert('Izin kamera diperlukan untuk fitur lambaian tangan. Pastikan mengizinkan akses kamera di browser iPhone Safari/Chrome.');
+    console.error('Camera/MediaPipe error:', err);
+    alert('Izin kamera diperlukan untuk sensor miring kepala di browser.');
+    btn.innerHTML = '📷 Aktifkan Sensor';
   }
 }
 
-function startMotionDetection() {
-  const video = document.getElementById('webcam');
-  const canvas = document.getElementById('motion-canvas');
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  const indicator = document.getElementById('gesture-indicator');
-
-  const width = canvas.width;
-  const height = canvas.height;
-
-  function processFrame() {
-    if (!isCameraActive) return;
-
-    if (video.readyState === video.HAVE_ENOUGH_DATA) {
-      ctx.drawImage(video, 0, 0, width, height);
-      const frame = ctx.getImageData(0, 0, width, height);
-
-      if (lastFrameData && !gestureCooldown) {
-        let leftMotion = 0;
-        let rightMotion = 0;
-        const threshold = 30; // pixel intensity delta threshold
-
-        // Split viewport horizontally into Left and Right zones
-        const halfWidth = Math.floor(width / 2);
-
-        for (let y = 0; y < height; y += 4) {
-          for (let x = 0; x < width; x += 4) {
-            const idx = (y * width + x) * 4;
-            // Greyscale difference
-            const diff = Math.abs(frame.data[idx] - lastFrameData.data[idx]) +
-                         Math.abs(frame.data[idx+1] - lastFrameData.data[idx+1]) +
-                         Math.abs(frame.data[idx+2] - lastFrameData.data[idx+2]);
-
-            if (diff > threshold * 3) {
-              if (x < halfWidth) {
-                // In mirrored camera: left in image is right in real life
-                leftMotion++;
-              } else {
-                rightMotion++;
-              }
-            }
-          }
-        }
-
-        const totalPixels = (width / 4) * (height / 4);
-        const leftRatio = leftMotion / totalPixels;
-        const rightRatio = rightMotion / totalPixels;
-        const triggerThreshold = 0.08; // 8% pixel movement in zone
-
-        // Mirror handling:
-        // User moves hand to LEFT -> Camera sensor sees motion on left zone (mirrored)
-        // User moves hand to RIGHT -> Camera sensor sees motion on right zone (mirrored)
-        if (leftRatio > triggerThreshold && leftRatio > rightRatio * 1.5) {
-          triggerGesture('next', '👉 Gerakan Terdeteksi: Langkah Berikutnya!');
-        } else if (rightRatio > triggerThreshold && rightRatio > leftRatio * 1.5) {
-          triggerGesture('prev', '👈 Gerakan Terdeteksi: Langkah Sebelumnya!');
-        }
-      }
-
-      lastFrameData = frame;
-    }
-
-    animationFrameId = requestAnimationFrame(processFrame);
+function onFaceResults(results) {
+  if (gestureCooldown || !results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
+    return;
   }
 
-  function triggerGesture(direction, text) {
-    gestureCooldown = true;
-    const status = document.getElementById('cam-status');
+  const landmarks = results.multiFaceLandmarks[0];
+  
+  // Landmark 33 = outer corner left eye, Landmark 263 = outer corner right eye
+  // Landmark 10 = top of forehead, Landmark 152 = chin
+  const leftEye = landmarks[33];
+  const rightEye = landmarks[263];
+  const forehead = landmarks[10];
+  const chin = landmarks[152];
+
+  if (!leftEye || !rightEye || !forehead || !chin) return;
+
+  // Calculate eye slope angle in degrees
+  const dy = rightEye.y - leftEye.y;
+  const dx = rightEye.x - leftEye.x;
+  
+  // Angle in radians then convert to degrees (-180 to 180)
+  const angleRad = Math.atan2(dy, dx);
+  const angleDeg = angleRad * (180 / Math.PI);
+
+  const status = document.getElementById('cam-status');
+  
+  // Threshold: ±30° to 45° tilt
+  // Because camera is mirrored (facing user):
+  // User tilts head to their RIGHT -> rightEye moves higher/lower accordingly
+  // Standard threshold 35° (comfortable 30°-45°)
+  if (angleDeg < -30) {
+    // Tilted right
+    triggerHeadGesture('next', '👉 Kepala Miring Kanan (~45°): Langkah Berikutnya!');
+  } else if (angleDeg > 30) {
+    // Tilted left
+    triggerHeadGesture('prev', '👈 Kepala Miring Kiri (~45°): Langkah Sebelumnya!');
+  }
+}
+
+function triggerHeadGesture(direction, text) {
+  gestureCooldown = true;
+  const status = document.getElementById('cam-status');
+  if (status) {
+    status.innerText = text;
+    status.style.color = 'var(--md-sys-color-primary)';
+    status.style.fontWeight = 'bold';
+  }
+
+  if (direction === 'next') {
+    nextStep();
+  } else if (direction === 'prev') {
+    prevStep();
+  }
+
+  // Cooldown 1.5s so user can straighten head back without double-trigger
+  setTimeout(() => {
+    gestureCooldown = false;
     if (status) {
-      status.innerText = text;
-      status.style.color = 'var(--md-sys-color-primary)';
-      status.style.fontWeight = 'bold';
+      status.innerText = 'Sensor Aktif: Miringkan kepala ±45° ke Kiri / Kanan';
+      status.style.color = 'var(--md-sys-color-on-surface-variant)';
+      status.style.fontWeight = 'normal';
     }
-
-    if (direction === 'next') {
-      nextStep();
-    } else if (direction === 'prev') {
-      prevStep();
-    }
-
-    // Cooldown 1.5 seconds to avoid double triggering
-    setTimeout(() => {
-      gestureCooldown = false;
-      if (status) {
-        status.innerText = 'Aktif: Lambaikan tangan ke KIRI (Berikutnya) / KANAN (Balik)';
-        status.style.color = 'var(--md-sys-color-on-surface-variant)';
-        status.style.fontWeight = 'normal';
-      }
-    }, 1500);
-  }
-
-  animationFrameId = requestAnimationFrame(processFrame);
+  }, 1500);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

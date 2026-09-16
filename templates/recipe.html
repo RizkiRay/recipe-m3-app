@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- MediaPipe Face Mesh for precise Head Tilt Detection -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -92,22 +95,21 @@
       <div class="camera-control-card">
         <div class="cam-header">
           <div class="cam-title">
-            <span class="cam-icon">✋</span>
+            <span class="cam-icon">🗣️</span>
             <div>
-              <div style="font-weight: 600; font-size: 0.95rem;">Navigasi Lambaian Tangan</div>
+              <div style="font-weight: 600; font-size: 0.95rem;">Navigasi Miring Kepala (Head Tilt)</div>
               <div style="font-size: 0.75rem; color: var(--md-sys-color-on-surface-variant);" id="cam-status">
-                Gunakan kamera depan tanpa menyentuh layar basah/kotor
+                Miringkan kepala 45°: Kanan (Berikutnya) / Kiri (Sebelumnya)
               </div>
             </div>
           </div>
           <button class="btn-cam-toggle" id="btn-toggle-cam" onclick="toggleCameraGesture()">
-            📷 Aktifkan Kamera
+            📷 Aktifkan Sensor
           </button>
         </div>
         <div id="cam-preview-container" style="display: none;">
           <video id="webcam" autoplay playsinline muted style="display: none;"></video>
           <canvas id="motion-canvas" width="160" height="120" style="display: none;"></canvas>
-          <div class="gesture-indicator" id="gesture-indicator" style="display: none;">Melacak gerakan tangan...</div>
         </div>
       </div>
 
