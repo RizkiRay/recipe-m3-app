@@ -78,7 +78,6 @@ def init_db():
         )
         """)
         r1_id = cursor.lastrowid
-        # Hokben groups & steps
         g_data = [
             ('Bahan Kulit', [
                 ('Telur (atau 1 utuh + 2 kuning)', '2', 'butir', 'Gunakan 2 putih telur untuk isian daging'),
@@ -129,7 +128,7 @@ def init_db():
         for st in s_data:
             cursor.execute("INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds) VALUES (?, ?, ?, ?, ?)", (r1_id, st[0], st[1], st[2], st[3]))
 
-    # 2. Seed Instagram Recipe: Ayam Rebus Jahe Bawang Putih (Hendry Wijaya)
+    # 2. Seed Instagram Recipe: Ayam Rebus Jahe Bawang Putih
     cursor.execute("SELECT id FROM recipes WHERE slug = 'ayam-rebus-jahe-bawang-putih'")
     if not cursor.fetchone():
         cursor.execute("""
@@ -185,6 +184,57 @@ def init_db():
         ]
         for st in s2_data:
             cursor.execute("INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds) VALUES (?, ?, ?, ?, ?)", (r2_id, st[0], st[1], st[2], st[3]))
+
+    # 3. Seed Instagram Recipe: Gil Gamja (Korean Potato Stick) by michelealex
+    cursor.execute("SELECT id FROM recipes WHERE slug = 'gil-gamja-kentang-panjang'")
+    if not cursor.fetchone():
+        cursor.execute("""
+        INSERT INTO recipes (slug, title, chef, description, youtube_id, media_url, servings, prep_time, cook_time, calories)
+        VALUES (
+            'gil-gamja-kentang-panjang',
+            'Gil Gamja (Korean Long Potato Stick)',
+            '@michelealex (Instagram)',
+            'Camilan kentang panjang khas Korea yang renyah di luar, kenyal lembut di dalam. Sangat murah meriah, satset, dan cocok untuk ide jualan keluarga.',
+            '',
+            'https://www.instagram.com/p/DbQIRBfP6Qd/',
+            '10 Porsi',
+            '15 menit',
+            '10 menit goreng',
+            'Crispy & Chewy Korean Snack'
+        )
+        """)
+        r3_id = cursor.lastrowid
+        
+        g3_data = [
+            ('Bahan Adonan Kentang', [
+                ('Kentang (Kupas & Potong)', '500', 'gr', 'Pilih kentang pulen'),
+                ('Air', '162', 'gr', 'Untuk memblender kentang'),
+                ('Tepung Tapioka', '125', 'gr', 'Kunci tekstur kenyal elastis'),
+                ('Garam', '2/3', 'sdt', ''),
+                ('Kaldu Bubuk', '1/2', 'sdt', '')
+            ]),
+            ('Bahan Saus Mayo Pedas', [
+                ('Mayones', '6', 'sdm', ''),
+                ('Saus Sambal', '6', 'sdm', ''),
+                ('Kental Manis', '1-2', 'sdm', 'Memberi rasa creamy manis gurih'),
+                ('Perasan Jeruk Nipis', '1', 'sdt', 'Menyeimbangkan rasa agar segar')
+            ])
+        ]
+        for g_idx, (g_name, items) in enumerate(g3_data):
+            cursor.execute("INSERT INTO ingredient_groups (recipe_id, name, sort_order) VALUES (?, ?, ?)", (r3_id, g_name, g_idx))
+            gid = cursor.lastrowid
+            for i_idx, it in enumerate(items):
+                cursor.execute("INSERT INTO ingredients (group_id, item, amount, unit, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?)", (gid, it[0], it[1], it[2], it[3], i_idx))
+
+        s3_data = [
+            (1, 'Haluskan Kentang', 'Masukkan 500 gr kentang yang sudah dikupas dan dipotong bersama 162 gr air ke dalam blender. Blender hingga halus dan cair merata.', 0),
+            (2, 'Masak Bubur Kentang', 'Tuangkan jus kentang ke dalam pan anti-lengket. Masak di atas api kecil-sedang sambil terus diaduk hingga mengental, kenyal, dan berwarna transparan.', 300),
+            (3, 'Campur Tapioka & Bumbu', 'Matikan api. Masukkan 125 gr tepung tapioka, 2/3 sdt garam, dan 1/2 sdt kaldu bubuk. Aduk cepat hingga adonan kalis dan menyatu sempurna.', 0),
+            (4, 'Bentuk & Goreng Panjang', 'Masukkan adonan kentang hangat ke dalam piping bag / plastik segitiga. Panaskan minyak goreng. Gunting ujung piping bag, lalu tekan adonan langsung memanjang ke dalam minyak panas sambil digunting. Goreng di api sedang hingga garing keemasan.', 420),
+            (5, 'Racik Saus Mayo & Sajikan', 'Campurkan mayones, saus sambal, kental manis, dan perasan jeruk nipis hingga rata. Sajikan Gil Gamja panas renyah dengan cocolan saus mayo pedas!', 0)
+        ]
+        for st in s3_data:
+            cursor.execute("INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds) VALUES (?, ?, ?, ?, ?)", (r3_id, st[0], st[1], st[2], st[3]))
 
     conn.commit()
     conn.close()
