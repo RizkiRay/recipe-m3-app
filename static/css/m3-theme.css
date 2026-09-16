@@ -475,7 +475,150 @@ body {
   transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
 }
 
-/* Recipe Drawer Bottom Sheet */
+/* Catalog Page Modern Styles */
+.catalog-hero {
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 6px;
+}
+
+.hero-sub {
+  font-size: 0.92rem;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.45;
+}
+
+.catalog-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.catalog-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--md-sys-color-on-surface);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.catalog-card:active {
+  transform: scale(0.98);
+  border-color: var(--md-sys-color-primary);
+}
+
+.catalog-card-media {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  background: var(--md-sys-color-surface-container);
+  overflow: hidden;
+}
+
+.catalog-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.catalog-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ig-gradient {
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+}
+
+.source-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  backdrop-filter: blur(8px);
+}
+
+.source-badge.youtube {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.source-badge.instagram {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.catalog-card-body {
+  padding: 16px;
+}
+
+.catalog-title {
+  font-size: 1.18rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--md-sys-color-on-surface);
+  margin-bottom: 4px;
+}
+
+.catalog-chef {
+  font-size: 0.85rem;
+  color: var(--md-sys-color-primary);
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.catalog-desc {
+  font-size: 0.88rem;
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.45;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.catalog-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: var(--md-sys-color-on-surface-variant);
+  padding-top: 10px;
+  border-top: 1px dashed var(--md-sys-color-outline-variant);
+}
+
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.meta-tag i {
+  color: var(--md-sys-color-primary);
+}
 .recipe-drawer-backdrop {
   position: fixed;
   inset: 0;

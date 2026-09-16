@@ -19,12 +19,14 @@
   <!-- Top App Bar -->
   <header class="top-app-bar">
     <div class="brand-wrapper">
-      <div class="brand-icon">
-        <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
-      </div>
-      <h1>Buku Resep</h1>
+      <a href="/catalog" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
+        <div class="brand-icon">
+          <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+        </div>
+        <h1>Buku Resep</h1>
+      </a>
     </div>
-    <!-- Recipe Selector Dropdown / Sheet Trigger -->
+    <!-- Recipe Selector Dropdown -->
     <div class="recipe-selector-wrapper">
       <select class="recipe-select-dropdown" onchange="location.href='/recipe/' + this.value">
         {% for r in all_recipes %}

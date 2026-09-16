@@ -13,12 +13,14 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request, slug: str = "ayam-rebus-jahe-bawang-putih"):
-    recipe = get_recipe_by_slug(slug)
-    if not recipe:
-        recipe = get_recipe_by_slug("egg-chicken-roll-hokben")
+async def index(request: Request):
     all_recipes = get_all_recipes()
-    return templates.TemplateResponse(request=request, name="recipe.html", context={"recipe": recipe, "all_recipes": all_recipes})
+    return templates.TemplateResponse(request=request, name="catalog.html", context={"all_recipes": all_recipes})
+
+@app.get("/catalog", response_class=HTMLResponse)
+async def catalog_view(request: Request):
+    all_recipes = get_all_recipes()
+    return templates.TemplateResponse(request=request, name="catalog.html", context={"all_recipes": all_recipes})
 
 @app.get("/recipe/{slug}", response_class=HTMLResponse)
 async def view_recipe(request: Request, slug: str):

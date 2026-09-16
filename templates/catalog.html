@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Katalog Resep — Buku Resep</title>
+  <link rel="stylesheet" href="/static/css/m3-theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header class="top-app-bar">
+    <div class="brand-wrapper">
+      <div class="brand-icon">
+        <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+      </div>
+      <h1>Katalog Resep</h1>
+    </div>
+    <span style="font-size: 0.8rem; font-weight: 700; color: var(--md-sys-color-primary);">
+      {{ all_recipes|length }} Koleksi
+    </span>
+  </header>
+
+  <main class="container" style="padding-top: 20px;">
+    
+    <!-- Hero Banner / Greeting -->
+    <div class="catalog-hero">
+      <div class="hero-title">Mau Masak Apa Hari Ini?</div>
+      <p class="hero-sub">Pilih resep favorit, siapkan bahan, dan ikuti panduan memasak bebas sentuh.</p>
+    </div>
+
+    <!-- Recipe Grid / List -->
+    <div class="catalog-grid">
+      {% for r in all_recipes %}
+        <a href="/recipe/{{ r.slug }}" class="catalog-card">
+          <div class="catalog-card-media">
+            {% if r.youtube_id %}
+              <img src="https://img.youtube.com/vi/{{ r.youtube_id }}/mqdefault.jpg" alt="{{ r.title }}" class="catalog-thumb">
+              <span class="source-badge youtube">
+                <i data-lucide="youtube" style="width: 14px; height: 14px;"></i> YouTube
+              </span>
+            {% else %}
+              <div class="catalog-thumb-placeholder ig-gradient">
+                <i data-lucide="chef-hat" style="width: 32px; height: 32px; color: #fff;"></i>
+              </div>
+              <span class="source-badge instagram">
+                <i data-lucide="instagram" style="width: 14px; height: 14px;"></i> Instagram
+              </span>
+            {% endif %}
+          </div>
+          <div class="catalog-card-body">
+            <h2 class="catalog-title">{{ r.title }}</h2>
+            <div class="catalog-chef">
+              <i data-lucide="utensils" style="width: 14px; height: 14px;"></i>
+              {{ r.chef }}
+            </div>
+            <p class="catalog-desc">{{ r.description }}</p>
+            
+            <div class="catalog-meta-row">
+              <span class="meta-tag">
+                <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+                {{ r.prep_time }}
+              </span>
+              <span class="meta-tag">
+                <i data-lucide="flame" style="width: 14px; height: 14px;"></i>
+                {{ r.cook_time }}
+              </span>
+              <span class="meta-tag">
+                <i data-lucide="users" style="width: 14px; height: 14px;"></i>
+                {{ r.servings }}
+              </span>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
