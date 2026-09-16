@@ -131,7 +131,6 @@ let gestureCooldown = false;
 
 async function toggleCameraGesture() {
   const btn = document.getElementById('btn-toggle-cam');
-  const preview = document.getElementById('cam-preview-container');
   const video = document.getElementById('webcam');
   const status = document.getElementById('cam-status');
 
@@ -145,7 +144,6 @@ async function toggleCameraGesture() {
     btn.innerHTML = '📷 Aktifkan Kamera';
     btn.style.background = 'var(--md-sys-color-primary-container)';
     btn.style.color = 'var(--md-sys-color-on-primary-container)';
-    preview.style.display = 'none';
     status.innerText = 'Gunakan kamera depan tanpa menyentuh layar';
     return;
   }
@@ -162,7 +160,6 @@ async function toggleCameraGesture() {
     btn.innerHTML = '🛑 Matikan Kamera';
     btn.style.background = 'var(--md-sys-color-error, #ba1a1a)';
     btn.style.color = '#ffffff';
-    preview.style.display = 'flex';
     status.innerText = 'Aktif: Lambaikan tangan ke KIRI (Berikutnya) / KANAN (Balik)';
 
     startMotionDetection();
@@ -238,9 +235,12 @@ function startMotionDetection() {
 
   function triggerGesture(direction, text) {
     gestureCooldown = true;
-    indicator.textContent = text;
-    indicator.style.color = 'var(--md-sys-color-on-primary)';
-    indicator.style.background = 'var(--md-sys-color-primary)';
+    const status = document.getElementById('cam-status');
+    if (status) {
+      status.innerText = text;
+      status.style.color = 'var(--md-sys-color-primary)';
+      status.style.fontWeight = 'bold';
+    }
 
     if (direction === 'next') {
       nextStep();
@@ -251,9 +251,11 @@ function startMotionDetection() {
     // Cooldown 1.5 seconds to avoid double triggering
     setTimeout(() => {
       gestureCooldown = false;
-      indicator.textContent = 'Melacak gerakan tangan...';
-      indicator.style.color = 'var(--md-sys-color-primary)';
-      indicator.style.background = 'var(--md-sys-color-surface-container-highest)';
+      if (status) {
+        status.innerText = 'Aktif: Lambaikan tangan ke KIRI (Berikutnya) / KANAN (Balik)';
+        status.style.color = 'var(--md-sys-color-on-surface-variant)';
+        status.style.fontWeight = 'normal';
+      }
     }, 1500);
   }
 
