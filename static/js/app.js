@@ -215,8 +215,6 @@ async function toggleCameraGesture() {
   }
 }
 
-let baselineBrowDist = null;
-
 function onFaceResults(results) {
   if (gestureCooldown || !results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
     return;
@@ -225,90 +223,21 @@ function onFaceResults(results) {
   const landmarks = results.multiFaceLandmarks[0];
   const leftEye = landmarks[33];
   const rightEye = landmarks[263];
-  
-  // MediaPipe FaceMesh canonical landmarks:
-  // Eyebrows: left = 105, right = 334
-  // Nose bridge: 168
-  // Mouth lips: upper inner = 13, lower inner = 14
-  const leftEyebrow = landmarks[105];
-  const rightEyebrow = landmarks[334];
-  const noseBridge = landmarks[168];
-  const upperLip = landmarks[13];
-  const lowerLip = landmarks[14];
 
-  if (!leftEye || !rightEye || !noseBridge) return;
+  if (!leftEye || !rightEye) return;
 
-  const eyeSpan = Math.hypot(rightEye.x - leftEye.x, rightEye.y - leftEye.y) || 1;
-
-  // 1. Dual Trigger for Timer: Eyebrow Raise OR Quick Mouth Open (Buka Mulut)
-  // Distance from nose bridge UP to eyebrows
-  if (leftEyebrow && rightEyebrow) {
-    const browLift = ((noseBridge.y - leftEyebrow.y) + (noseBridge.y - rightEyebrow.y)) / 2;
-    const browRatio = browLift / eyeSpan;
-
-    if (baselineBrowDist === null) {
-      baselineBrowDist = browRatio;
-    } else {
-      // Very slow drift towards resting face
-      if (browRatio < baselineBrowDist * 1.05) {
-        baselineBrowDist = baselineBrowDist * 0.98 + browRatio * 0.02;
-      }
-    }
-
-    // Trigger on clear eyebrow lift (> 10% above baseline)
-    if (browRatio > baselineBrowDist * 1.10) {
-      triggerTimerGesture('🤨');
-      return;
-    }
-  }
-
-  // Backup Trigger: Mouth Open (Sangat responsif & 100% akurat)
-  if (upperLip && lowerLip) {
-    const mouthGap = Math.abs(lowerLip.y - upperLip.y) / eyeSpan;
-    // Normal mouth closed < 0.05, open > 0.15
-    if (mouthGap > 0.16) {
-      triggerTimerGesture('😮');
-      return;
-    }
-  }
-
-  // 2. Detect Head Tilt (Next / Prev Step)
+  // Detect Head Tilt (Next / Prev Step)
   const dy = rightEye.y - leftEye.y;
   const dx = rightEye.x - leftEye.x;
   const angleRad = Math.atan2(dy, dx);
   const angleDeg = angleRad * (180 / Math.PI);
 
-  // Threshold: ±10° tilt
+  // Threshold: ±10° to 12° tilt
   if (angleDeg < -10) {
     triggerHeadGesture('next');
   } else if (angleDeg > 10) {
     triggerHeadGesture('prev');
   }
-}
-
-function triggerTimerGesture(icon) {
-  gestureCooldown = true;
-  const sensorIcon = document.getElementById('sensor-pill-icon');
-  if (sensorIcon) {
-    sensorIcon.innerText = icon || '⏱️';
-  }
-
-  // Find timer on currently active step card
-  const activeStepWrapper = document.getElementById(`step-wrapper-${currentStepIdx}`);
-  if (activeStepWrapper) {
-    const timerBtn = activeStepWrapper.querySelector('.btn-timer');
-    if (timerBtn) {
-      timerBtn.click();
-      if ('vibrate' in navigator) navigator.vibrate([150]);
-    }
-  }
-
-  setTimeout(() => {
-    gestureCooldown = false;
-    if (sensorIcon && isCameraActive) {
-      sensorIcon.innerText = '🟢';
-    }
-  }, 1200);
 }
 
 function triggerHeadGesture(direction) {
