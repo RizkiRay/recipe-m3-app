@@ -226,48 +226,48 @@ function onFaceResults(results) {
   const leftEye = landmarks[33];
   const rightEye = landmarks[263];
   
-  // MediaPipe FaceMesh canonical landmark indices:
-  // Left eyebrow middle = 105, Right eyebrow middle = 334
-  // Left eye top = 159, Left eye bottom = 145
-  // Right eye top = 386, Right eye bottom = 374
-  // Nose bridge / between eyes = 168 (FIXED ANCHOR — does NOT move during blink)
+  // MediaPipe FaceMesh canonical landmarks:
+  // Eyebrows: left = 105, right = 334
+  // Nose bridge: 168
+  // Mouth lips: upper inner = 13, lower inner = 14
   const leftEyebrow = landmarks[105];
   const rightEyebrow = landmarks[334];
   const noseBridge = landmarks[168];
-  
-  const leftEyeTop = landmarks[159];
-  const leftEyeBottom = landmarks[145];
-  const rightEyeTop = landmarks[386];
-  const rightEyeBottom = landmarks[374];
+  const upperLip = landmarks[13];
+  const lowerLip = landmarks[14];
 
   if (!leftEye || !rightEye || !noseBridge) return;
 
-  const eyeSpan = Math.hypot(rightEye.x - leftEye.x, rightEye.y - leftEye.y);
+  const eyeSpan = Math.hypot(rightEye.x - leftEye.x, rightEye.y - leftEye.y) || 1;
 
-  // Check Eye Openness (Eye Aspect Ratio / Height)
-  const leftEyeHeight = Math.abs(leftEyeBottom.y - leftEyeTop.y) / (eyeSpan || 1);
-  const rightEyeHeight = Math.abs(rightEyeBottom.y - rightEyeTop.y) / (eyeSpan || 1);
-  const isBlinking = (leftEyeHeight < 0.05 || rightEyeHeight < 0.05);
+  // 1. Dual Trigger for Timer: Eyebrow Raise OR Quick Mouth Open (Buka Mulut)
+  // Distance from nose bridge UP to eyebrows
+  if (leftEyebrow && rightEyebrow) {
+    const browLift = ((noseBridge.y - leftEyebrow.y) + (noseBridge.y - rightEyebrow.y)) / 2;
+    const browRatio = browLift / eyeSpan;
 
-  // 1. Detect Eyebrow Raise (Anchored to NOSE BRIDGE, IGNORE WHEN BLINKING)
-  if (!isBlinking && leftEyebrow && rightEyebrow) {
-    // Distance from nose bridge UP to eyebrows (noseBridge.y - eyebrow.y)
-    const leftBrowLift = noseBridge.y - leftEyebrow.y;
-    const rightBrowLift = noseBridge.y - rightEyebrow.y;
-    const currentRatio = ((leftBrowLift + rightBrowLift) / 2) / (eyeSpan || 1);
-
-    // Baseline calibration
     if (baselineBrowDist === null) {
-      baselineBrowDist = currentRatio;
+      baselineBrowDist = browRatio;
     } else {
-      if (currentRatio < baselineBrowDist * 1.08) {
-        baselineBrowDist = baselineBrowDist * 0.95 + currentRatio * 0.05;
+      // Very slow drift towards resting face
+      if (browRatio < baselineBrowDist * 1.05) {
+        baselineBrowDist = baselineBrowDist * 0.98 + browRatio * 0.02;
       }
     }
 
-    // Only trigger if lifted significantly above relaxed face AND eyes are wide open
-    if (currentRatio > baselineBrowDist * 1.15 && leftEyeHeight > 0.07 && rightEyeHeight > 0.07) {
-      triggerEyebrowGesture();
+    // Trigger on clear eyebrow lift (> 10% above baseline)
+    if (browRatio > baselineBrowDist * 1.10) {
+      triggerTimerGesture('🤨');
+      return;
+    }
+  }
+
+  // Backup Trigger: Mouth Open (Sangat responsif & 100% akurat)
+  if (upperLip && lowerLip) {
+    const mouthGap = Math.abs(lowerLip.y - upperLip.y) / eyeSpan;
+    // Normal mouth closed < 0.05, open > 0.15
+    if (mouthGap > 0.16) {
+      triggerTimerGesture('😮');
       return;
     }
   }
@@ -286,11 +286,11 @@ function onFaceResults(results) {
   }
 }
 
-function triggerEyebrowGesture() {
+function triggerTimerGesture(icon) {
   gestureCooldown = true;
   const sensorIcon = document.getElementById('sensor-pill-icon');
   if (sensorIcon) {
-    sensorIcon.innerText = '🤨';
+    sensorIcon.innerText = icon || '⏱️';
   }
 
   // Find timer on currently active step card
