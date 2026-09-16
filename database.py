@@ -159,7 +159,7 @@ def get_recipe_by_slug(slug='egg-chicken-roll-hokben'):
     for g in groups:
         g_dict = dict(g)
         cursor.execute("SELECT * FROM ingredients WHERE group_id = ? ORDER BY sort_order", (g['id'],))
-        g_dict['items'] = [dict(i) for i in cursor.fetchall()]
+        g_dict['ingredients_list'] = [dict(i) for i in cursor.fetchall()]
         recipe_dict['ingredient_groups'].append(g_dict)
         
     # Get instructions

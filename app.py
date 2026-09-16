@@ -17,7 +17,7 @@ async def index(request: Request):
     recipe = get_recipe_by_slug("egg-chicken-roll-hokben")
     if not recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
-    return templates.TemplateResponse("recipe.html", {"request": request, "recipe": recipe})
+    return templates.TemplateResponse(request=request, name="recipe.html", context={"recipe": recipe})
 
 @app.get("/api/recipes")
 async def api_recipes():
