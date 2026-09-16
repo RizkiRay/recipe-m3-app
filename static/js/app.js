@@ -140,12 +140,10 @@ async function toggleCameraGesture() {
   const pill = document.getElementById('sensor-pill');
   const pillIcon = document.getElementById('sensor-pill-icon');
   const pillText = document.getElementById('sensor-pill-text');
-  const video = document.getElementById('webcam');
+  let video = document.getElementById('webcam');
 
   if (isCameraActive) {
-    if (mpCamera) {
-      mpCamera.stop();
-    }
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
     if (cameraStream) {
       cameraStream.getTracks().forEach(track => track.stop());
     }
@@ -159,39 +157,60 @@ async function toggleCameraGesture() {
   try {
     pillText.innerText = 'Menyiapkan AI...';
     
-    faceMesh = new FaceMesh({
-      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+    if (!video) {
+      video = document.createElement('video');
+      video.id = 'webcam';
+      video.setAttribute('autoplay', '');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('muted', '');
+      video.style.cssText = 'position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;';
+      document.body.appendChild(video);
+    }
+
+    if (!faceMesh) {
+      faceMesh = new FaceMesh({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+      });
+
+      faceMesh.setOptions({
+        maxNumFaces: 1,
+        refineLandmarks: false,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+
+      faceMesh.onResults(onFaceResults);
+    }
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } },
+      audio: false
     });
+    
+    cameraStream = stream;
+    video.srcObject = stream;
+    await video.play();
 
-    faceMesh.setOptions({
-      maxNumFaces: 1,
-      refineLandmarks: false,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5
-    });
-
-    faceMesh.onResults(onFaceResults);
-
-    mpCamera = new Camera(video, {
-      onFrame: async () => {
-        if (isCameraActive) {
-          await faceMesh.send({ image: video });
-        }
-      },
-      width: 320,
-      height: 240,
-      facingMode: 'user'
-    });
-
-    await mpCamera.start();
     isCameraActive = true;
     pill.classList.add('active');
     pillIcon.innerText = '🟢';
     pillText.innerText = 'Sensor Aktif (Miringkan Kepala)';
+
+    // Process frames directly with requestAnimationFrame (100% native Safari iOS compatible)
+    async function processVideoFrame() {
+      if (!isCameraActive) return;
+      if (video.readyState >= 2) {
+        await faceMesh.send({ image: video });
+      }
+      animationFrameId = requestAnimationFrame(processVideoFrame);
+    }
+    animationFrameId = requestAnimationFrame(processVideoFrame);
+
   } catch (err) {
     console.error('Camera/MediaPipe error:', err);
-    alert('Izin kamera diperlukan untuk sensor miring kepala di browser.');
+    alert('Izin kamera diperlukan untuk sensor miring kepala di browser Safari/Chrome.');
     pill.classList.remove('active');
+    pillIcon.innerText = '🗣️';
     pillText.innerText = 'Aktifkan Sensor Kepala';
   }
 }
