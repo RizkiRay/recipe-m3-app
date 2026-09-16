@@ -12,13 +12,16 @@ function switchTab(tab) {
   
   const bottomBar = document.getElementById('bottom-bar');
   const topAppBar = document.querySelector('.top-app-bar');
+  const viewTabs = document.querySelector('.view-mode-tabs');
 
   if (tab === 'cooking') {
     if (topAppBar) topAppBar.style.display = 'none';
+    if (viewTabs) viewTabs.style.display = 'none';
     bottomBar.style.display = 'flex';
     renderStep(currentStepIdx);
   } else {
     if (topAppBar) topAppBar.style.display = 'flex';
+    if (viewTabs) viewTabs.style.display = 'flex';
     bottomBar.style.display = 'none';
   }
 }
