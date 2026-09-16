@@ -215,6 +215,8 @@ async function toggleCameraGesture() {
   }
 }
 
+let baselineBrowDist = null;
+
 function onFaceResults(results) {
   if (gestureCooldown || !results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) {
     return;
@@ -224,26 +226,36 @@ function onFaceResults(results) {
   const leftEye = landmarks[33];
   const rightEye = landmarks[263];
   
-  // Eyebrow landmarks: left eyebrow top = 70/105, right eyebrow top = 336/300
-  // Eye top landmarks: left eye top = 159, right eye top = 386
-  const leftEyebrow = landmarks[70];
-  const rightEyebrow = landmarks[300];
+  // MediaPipe FaceMesh canonical landmark indices:
+  // Left eyebrow middle = 105, Right eyebrow middle = 334
+  // Left eye center top = 159, Right eye center top = 386
+  // Nose bridge / between eyes = 168
+  const leftEyebrow = landmarks[105];
+  const rightEyebrow = landmarks[334];
   const leftEyeTop = landmarks[159];
   const rightEyeTop = landmarks[386];
 
   if (!leftEye || !rightEye) return;
 
-  // 1. Detect Eyebrow Raise (Toggle Active Step Timer)
+  // 1. Detect Eyebrow Raise (Adaptive delta relative to neutral face)
   if (leftEyebrow && rightEyebrow && leftEyeTop && rightEyeTop) {
     const leftDist = leftEyeTop.y - leftEyebrow.y;
     const rightDist = rightEyeTop.y - rightEyebrow.y;
     const eyeSpan = Math.hypot(rightEye.x - leftEye.x, rightEye.y - leftEye.y);
+    const currentRatio = ((leftDist + rightDist) / 2) / (eyeSpan || 1);
 
-    // Normalize distance relative to face size
-    const avgBrowDistRatio = ((leftDist + rightDist) / 2) / (eyeSpan || 1);
+    // Exponential moving average for baseline face calibration
+    if (baselineBrowDist === null) {
+      baselineBrowDist = currentRatio;
+    } else {
+      // Slowly adapt baseline when face is relaxed
+      if (currentRatio < baselineBrowDist * 1.1) {
+        baselineBrowDist = baselineBrowDist * 0.95 + currentRatio * 0.05;
+      }
+    }
 
-    // Normal ratio ~0.15 - 0.20; Raised eyebrow ratio >= 0.26
-    if (avgBrowDistRatio > 0.26) {
+    // Trigger when eyebrows lift > 15% above baseline or absolute ratio > 0.20
+    if (currentRatio > baselineBrowDist * 1.18 || currentRatio > 0.21) {
       triggerEyebrowGesture();
       return;
     }
@@ -255,7 +267,7 @@ function onFaceResults(results) {
   const angleRad = Math.atan2(dy, dx);
   const angleDeg = angleRad * (180 / Math.PI);
 
-  // Threshold: ±10° to 12° tilt (ringan & sangat santai)
+  // Threshold: ±10° tilt
   if (angleDeg < -10) {
     triggerHeadGesture('next');
   } else if (angleDeg > 10) {
