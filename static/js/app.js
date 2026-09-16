@@ -11,10 +11,14 @@ function switchTab(tab) {
   document.getElementById('section-cooking').style.display = tab === 'cooking' ? 'block' : 'none';
   
   const bottomBar = document.getElementById('bottom-bar');
+  const topAppBar = document.querySelector('.top-app-bar');
+
   if (tab === 'cooking') {
+    if (topAppBar) topAppBar.style.display = 'none';
     bottomBar.style.display = 'flex';
     renderStep(currentStepIdx);
   } else {
+    if (topAppBar) topAppBar.style.display = 'flex';
     bottomBar.style.display = 'none';
   }
 }
@@ -64,7 +68,7 @@ function renderStep(idx) {
     }
   }
 
-  window.scrollTo({ top: document.getElementById('section-cooking').offsetTop - 80, behavior: 'smooth' });
+  window.scrollTo({ top: document.getElementById('section-cooking').offsetTop - 10, behavior: 'smooth' });
 }
 
 function nextStep() {
