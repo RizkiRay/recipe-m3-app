@@ -223,9 +223,33 @@ function onFaceResults(results) {
   const landmarks = results.multiFaceLandmarks[0];
   const leftEye = landmarks[33];
   const rightEye = landmarks[263];
+  
+  // Eyebrow landmarks: left eyebrow top = 70/105, right eyebrow top = 336/300
+  // Eye top landmarks: left eye top = 159, right eye top = 386
+  const leftEyebrow = landmarks[70];
+  const rightEyebrow = landmarks[300];
+  const leftEyeTop = landmarks[159];
+  const rightEyeTop = landmarks[386];
 
   if (!leftEye || !rightEye) return;
 
+  // 1. Detect Eyebrow Raise (Toggle Active Step Timer)
+  if (leftEyebrow && rightEyebrow && leftEyeTop && rightEyeTop) {
+    const leftDist = leftEyeTop.y - leftEyebrow.y;
+    const rightDist = rightEyeTop.y - rightEyebrow.y;
+    const eyeSpan = Math.hypot(rightEye.x - leftEye.x, rightEye.y - leftEye.y);
+
+    // Normalize distance relative to face size
+    const avgBrowDistRatio = ((leftDist + rightDist) / 2) / (eyeSpan || 1);
+
+    // Normal ratio ~0.15 - 0.20; Raised eyebrow ratio >= 0.26
+    if (avgBrowDistRatio > 0.26) {
+      triggerEyebrowGesture();
+      return;
+    }
+  }
+
+  // 2. Detect Head Tilt (Next / Prev Step)
   const dy = rightEye.y - leftEye.y;
   const dx = rightEye.x - leftEye.x;
   const angleRad = Math.atan2(dy, dx);
@@ -237,6 +261,31 @@ function onFaceResults(results) {
   } else if (angleDeg > 10) {
     triggerHeadGesture('prev');
   }
+}
+
+function triggerEyebrowGesture() {
+  gestureCooldown = true;
+  const sensorIcon = document.getElementById('sensor-pill-icon');
+  if (sensorIcon) {
+    sensorIcon.innerText = '🤨';
+  }
+
+  // Find timer on currently active step card
+  const activeStepWrapper = document.getElementById(`step-wrapper-${currentStepIdx}`);
+  if (activeStepWrapper) {
+    const timerBtn = activeStepWrapper.querySelector('.btn-timer');
+    if (timerBtn) {
+      timerBtn.click();
+      if ('vibrate' in navigator) navigator.vibrate([150]);
+    }
+  }
+
+  setTimeout(() => {
+    gestureCooldown = false;
+    if (sensorIcon && isCameraActive) {
+      sensorIcon.innerText = '🟢';
+    }
+  }, 1200);
 }
 
 function triggerHeadGesture(direction) {
