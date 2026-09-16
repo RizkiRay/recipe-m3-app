@@ -122,6 +122,144 @@ function startTimer(id, initialSeconds) {
 let touchStartX = 0;
 let touchEndX = 0;
 
+// Camera Vision Hand Wave Detection
+let cameraStream = null;
+let isCameraActive = false;
+let animationFrameId = null;
+let lastFrameData = null;
+let gestureCooldown = false;
+
+async function toggleCameraGesture() {
+  const btn = document.getElementById('btn-toggle-cam');
+  const preview = document.getElementById('cam-preview-container');
+  const video = document.getElementById('webcam');
+  const status = document.getElementById('cam-status');
+
+  if (isCameraActive) {
+    // Stop camera
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+    }
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    isCameraActive = false;
+    btn.innerHTML = '📷 Aktifkan Kamera';
+    btn.style.background = 'var(--md-sys-color-primary-container)';
+    btn.style.color = 'var(--md-sys-color-on-primary-container)';
+    preview.style.display = 'none';
+    status.innerText = 'Gunakan kamera depan tanpa menyentuh layar';
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } },
+      audio: false
+    });
+    cameraStream = stream;
+    video.srcObject = stream;
+    await video.play();
+    isCameraActive = true;
+    btn.innerHTML = '🛑 Matikan Kamera';
+    btn.style.background = 'var(--md-sys-color-error, #ba1a1a)';
+    btn.style.color = '#ffffff';
+    preview.style.display = 'flex';
+    status.innerText = 'Aktif: Lambaikan tangan ke KIRI (Berikutnya) / KANAN (Balik)';
+
+    startMotionDetection();
+  } catch (err) {
+    console.error('Camera access error:', err);
+    alert('Izin kamera diperlukan untuk fitur lambaian tangan. Pastikan mengizinkan akses kamera di browser iPhone Safari/Chrome.');
+  }
+}
+
+function startMotionDetection() {
+  const video = document.getElementById('webcam');
+  const canvas = document.getElementById('motion-canvas');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const indicator = document.getElementById('gesture-indicator');
+
+  const width = canvas.width;
+  const height = canvas.height;
+
+  function processFrame() {
+    if (!isCameraActive) return;
+
+    if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      ctx.drawImage(video, 0, 0, width, height);
+      const frame = ctx.getImageData(0, 0, width, height);
+
+      if (lastFrameData && !gestureCooldown) {
+        let leftMotion = 0;
+        let rightMotion = 0;
+        const threshold = 30; // pixel intensity delta threshold
+
+        // Split viewport horizontally into Left and Right zones
+        const halfWidth = Math.floor(width / 2);
+
+        for (let y = 0; y < height; y += 4) {
+          for (let x = 0; x < width; x += 4) {
+            const idx = (y * width + x) * 4;
+            // Greyscale difference
+            const diff = Math.abs(frame.data[idx] - lastFrameData.data[idx]) +
+                         Math.abs(frame.data[idx+1] - lastFrameData.data[idx+1]) +
+                         Math.abs(frame.data[idx+2] - lastFrameData.data[idx+2]);
+
+            if (diff > threshold * 3) {
+              if (x < halfWidth) {
+                // In mirrored camera: left in image is right in real life
+                leftMotion++;
+              } else {
+                rightMotion++;
+              }
+            }
+          }
+        }
+
+        const totalPixels = (width / 4) * (height / 4);
+        const leftRatio = leftMotion / totalPixels;
+        const rightRatio = rightMotion / totalPixels;
+        const triggerThreshold = 0.08; // 8% pixel movement in zone
+
+        // Mirror handling:
+        // User moves hand to LEFT -> Camera sensor sees motion on left zone (mirrored)
+        // User moves hand to RIGHT -> Camera sensor sees motion on right zone (mirrored)
+        if (leftRatio > triggerThreshold && leftRatio > rightRatio * 1.5) {
+          triggerGesture('next', '👉 Gerakan Terdeteksi: Langkah Berikutnya!');
+        } else if (rightRatio > triggerThreshold && rightRatio > leftRatio * 1.5) {
+          triggerGesture('prev', '👈 Gerakan Terdeteksi: Langkah Sebelumnya!');
+        }
+      }
+
+      lastFrameData = frame;
+    }
+
+    animationFrameId = requestAnimationFrame(processFrame);
+  }
+
+  function triggerGesture(direction, text) {
+    gestureCooldown = true;
+    indicator.textContent = text;
+    indicator.style.color = 'var(--md-sys-color-on-primary)';
+    indicator.style.background = 'var(--md-sys-color-primary)';
+
+    if (direction === 'next') {
+      nextStep();
+    } else if (direction === 'prev') {
+      prevStep();
+    }
+
+    // Cooldown 1.5 seconds to avoid double triggering
+    setTimeout(() => {
+      gestureCooldown = false;
+      indicator.textContent = 'Melacak gerakan tangan...';
+      indicator.style.color = 'var(--md-sys-color-primary)';
+      indicator.style.background = 'var(--md-sys-color-surface-container-highest)';
+    }, 1500);
+  }
+
+  animationFrameId = requestAnimationFrame(processFrame);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const cookSection = document.getElementById('section-cooking');
   cookSection.addEventListener('touchstart', e => {

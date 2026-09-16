@@ -438,6 +438,70 @@ body {
   flex: 1;
 }
 
+/* Camera Gesture Control */
+.camera-control-card {
+  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.cam-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cam-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cam-icon {
+  font-size: 1.3rem;
+}
+
+.btn-cam-toggle {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border: none;
+  padding: 6px 12px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#cam-preview-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#webcam {
+  width: 90px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: var(--md-sys-shape-corner-medium);
+  transform: scaleX(-1); /* mirror */
+  border: 2px solid var(--md-sys-color-primary);
+}
+
+.gesture-indicator {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--md-sys-color-primary);
+  background: var(--md-sys-color-surface-container-highest);
+  padding: 6px 12px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  flex: 1;
+}
+
 /* Step Progress Indicator */
 .step-progress-bar {
   height: 6px;

@@ -88,6 +88,29 @@
     <!-- Section 2: Cooking Mode (One-Handed Focus Steps) -->
     <section id="section-cooking" style="display: none;">
       
+      <!-- Gesture Camera Control Card -->
+      <div class="camera-control-card">
+        <div class="cam-header">
+          <div class="cam-title">
+            <span class="cam-icon">✋</span>
+            <div>
+              <div style="font-weight: 600; font-size: 0.95rem;">Navigasi Lambaian Tangan</div>
+              <div style="font-size: 0.75rem; color: var(--md-sys-color-on-surface-variant);" id="cam-status">
+                Gunakan kamera depan tanpa menyentuh layar basah/kotor
+              </div>
+            </div>
+          </div>
+          <button class="btn-cam-toggle" id="btn-toggle-cam" onclick="toggleCameraGesture()">
+            📷 Aktifkan Kamera
+          </button>
+        </div>
+        <div id="cam-preview-container" style="display: none;">
+          <video id="webcam" autoplay playsinline muted></video>
+          <canvas id="motion-canvas" width="160" height="120" style="display: none;"></canvas>
+          <div class="gesture-indicator" id="gesture-indicator">Melacak gerakan tangan...</div>
+        </div>
+      </div>
+
       <!-- Progress Bar -->
       <div class="step-progress-bar">
         <div class="step-progress-fill" id="step-progress"></div>
