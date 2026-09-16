@@ -91,29 +91,7 @@
     <!-- Section 2: Cooking Mode (One-Handed Focus Steps) -->
     <section id="section-cooking" style="display: none;">
       
-      <!-- Gesture Camera Control Card -->
-      <div class="camera-control-card">
-        <div class="cam-header">
-          <div class="cam-title">
-            <span class="cam-icon">🗣️</span>
-            <div>
-              <div style="font-weight: 600; font-size: 0.95rem;">Navigasi Miring Kepala (Head Tilt)</div>
-              <div style="font-size: 0.75rem; color: var(--md-sys-color-on-surface-variant);" id="cam-status">
-                Miringkan kepala sedikit (~18°-20°): Kanan (Berikutnya) / Kiri (Sebelumnya)
-              </div>
-            </div>
-          </div>
-          <button class="btn-cam-toggle" id="btn-toggle-cam" onclick="toggleCameraGesture()">
-            📷 Aktifkan Sensor
-          </button>
-        </div>
-        <div id="cam-preview-container" style="display: none;">
-          <video id="webcam" autoplay playsinline muted style="display: none;"></video>
-          <canvas id="motion-canvas" width="160" height="120" style="display: none;"></canvas>
-        </div>
-      </div>
-
-      <!-- Progress Bar -->
+      <!-- Progress Bar (At Top of Cooking Mode) -->
       <div class="step-progress-bar">
         <div class="step-progress-fill" id="step-progress"></div>
       </div>
@@ -153,15 +131,26 @@
 
   <!-- One-Handed Bottom Action Bar (Fixed at Thumb Zone) -->
   <footer class="one-hand-bottom-bar" id="bottom-bar" style="display: none;">
-    <button class="btn-nav-onehand btn-full-list" onclick="switchTab('ingredients')">
-      🥗 Lihat Bahan
-    </button>
-    <button class="btn-nav-onehand btn-prev" id="btn-prev" onclick="prevStep()" disabled>
-      ◀ Balik
-    </button>
-    <button class="btn-nav-onehand btn-next" id="btn-next" onclick="nextStep()">
-      Langkah Berikutnya ➔
-    </button>
+    <div class="bottom-bar-wrapper">
+      <!-- Minimalist Sensor Status Pill -->
+      <div class="sensor-pill" id="sensor-pill" onclick="toggleCameraGesture()">
+        <span id="sensor-pill-icon">🗣️</span>
+        <span id="sensor-pill-text">Aktifkan Sensor Kepala</span>
+      </div>
+
+      <!-- Main Action Buttons -->
+      <div class="bottom-action-buttons">
+        <button class="btn-nav-onehand btn-full-list" onclick="switchTab('ingredients')">
+          🥗 Bahan
+        </button>
+        <button class="btn-nav-onehand btn-prev" id="btn-prev" onclick="prevStep()" disabled>
+          ◀ Balik
+        </button>
+        <button class="btn-nav-onehand btn-next" id="btn-next" onclick="nextStep()">
+          Lanjut ➔
+        </button>
+      </div>
+    </div>
   </footer>
 
   <script src="/static/js/app.js"></script>

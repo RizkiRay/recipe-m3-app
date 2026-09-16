@@ -137,9 +137,10 @@ let faceMesh = null;
 let mpCamera = null;
 
 async function toggleCameraGesture() {
-  const btn = document.getElementById('btn-toggle-cam');
+  const pill = document.getElementById('sensor-pill');
+  const pillIcon = document.getElementById('sensor-pill-icon');
+  const pillText = document.getElementById('sensor-pill-text');
   const video = document.getElementById('webcam');
-  const status = document.getElementById('cam-status');
 
   if (isCameraActive) {
     if (mpCamera) {
@@ -149,15 +150,14 @@ async function toggleCameraGesture() {
       cameraStream.getTracks().forEach(track => track.stop());
     }
     isCameraActive = false;
-    btn.innerHTML = '📷 Aktifkan Sensor';
-    btn.style.background = 'var(--md-sys-color-primary-container)';
-    btn.style.color = 'var(--md-sys-color-on-primary-container)';
-    status.innerText = 'Miringkan kepala 45°: Kanan (Berikutnya) / Kiri (Sebelumnya)';
+    pill.classList.remove('active');
+    pillIcon.innerText = '🗣️';
+    pillText.innerText = 'Aktifkan Sensor Kepala';
     return;
   }
 
   try {
-    btn.innerHTML = '⏳ Menyiapkan AI...';
+    pillText.innerText = 'Menyiapkan AI...';
     
     faceMesh = new FaceMesh({
       locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
@@ -185,14 +185,14 @@ async function toggleCameraGesture() {
 
     await mpCamera.start();
     isCameraActive = true;
-    btn.innerHTML = '🛑 Matikan Sensor';
-    btn.style.background = 'var(--md-sys-color-error, #ba1a1a)';
-    btn.style.color = '#ffffff';
-    status.innerText = 'Sensor Aktif: Miringkan kepala ±45° ke Kiri / Kanan';
+    pill.classList.add('active');
+    pillIcon.innerText = '🟢';
+    pillText.innerText = 'Sensor Aktif (Miringkan Kepala)';
   } catch (err) {
     console.error('Camera/MediaPipe error:', err);
     alert('Izin kamera diperlukan untuk sensor miring kepala di browser.');
-    btn.innerHTML = '📷 Aktifkan Sensor';
+    pill.classList.remove('active');
+    pillText.innerText = 'Aktifkan Sensor Kepala';
   }
 }
 
@@ -202,43 +202,28 @@ function onFaceResults(results) {
   }
 
   const landmarks = results.multiFaceLandmarks[0];
-  
-  // Landmark 33 = outer corner left eye, Landmark 263 = outer corner right eye
-  // Landmark 10 = top of forehead, Landmark 152 = chin
   const leftEye = landmarks[33];
   const rightEye = landmarks[263];
-  const forehead = landmarks[10];
-  const chin = landmarks[152];
 
-  if (!leftEye || !rightEye || !forehead || !chin) return;
+  if (!leftEye || !rightEye) return;
 
-  // Calculate eye slope angle in degrees
   const dy = rightEye.y - leftEye.y;
   const dx = rightEye.x - leftEye.x;
-  
-  // Angle in radians then convert to degrees (-180 to 180)
   const angleRad = Math.atan2(dy, dx);
   const angleDeg = angleRad * (180 / Math.PI);
 
-  const status = document.getElementById('cam-status');
-  
-  // Threshold: ±18° to 20° tilt (natural, slight head tilt)
   if (angleDeg < -18) {
-    // Tilted right
-    triggerHeadGesture('next', '👉 Kepala Miring Kanan: Langkah Berikutnya!');
+    triggerHeadGesture('next', '👉 Kepala Miring Kanan: Lanjut!');
   } else if (angleDeg > 18) {
-    // Tilted left
-    triggerHeadGesture('prev', '👈 Kepala Miring Kiri: Langkah Sebelumnya!');
+    triggerHeadGesture('prev', '👈 Kepala Miring Kiri: Balik!');
   }
 }
 
 function triggerHeadGesture(direction, text) {
   gestureCooldown = true;
-  const status = document.getElementById('cam-status');
-  if (status) {
-    status.innerText = text;
-    status.style.color = 'var(--md-sys-color-primary)';
-    status.style.fontWeight = 'bold';
+  const pillText = document.getElementById('sensor-pill-text');
+  if (pillText) {
+    pillText.innerText = text;
   }
 
   if (direction === 'next') {
@@ -250,10 +235,8 @@ function triggerHeadGesture(direction, text) {
   // Cooldown 1.5s so user can straighten head back without double-trigger
   setTimeout(() => {
     gestureCooldown = false;
-    if (status) {
-      status.innerText = 'Sensor Aktif: Miringkan kepala ±45° ke Kiri / Kanan';
-      status.style.color = 'var(--md-sys-color-on-surface-variant)';
-      status.style.fontWeight = 'normal';
+    if (pillText && isCameraActive) {
+      pillText.innerText = 'Sensor Aktif (Miringkan Kepala)';
     }
   }, 1500);
 }
