@@ -132,22 +132,19 @@
   <!-- One-Handed Bottom Action Bar (Fixed at Thumb Zone) -->
   <footer class="one-hand-bottom-bar" id="bottom-bar" style="display: none;">
     <div class="bottom-bar-wrapper">
-      <!-- Minimalist Sensor Status Pill -->
-      <div class="sensor-pill" id="sensor-pill" onclick="toggleCameraGesture()">
-        <span id="sensor-pill-icon">🗣️</span>
-        <span id="sensor-pill-text">Aktifkan Sensor Kepala</span>
-      </div>
-
       <!-- Main Action Buttons -->
       <div class="bottom-action-buttons">
-        <button class="btn-nav-onehand btn-full-list" onclick="switchTab('ingredients')">
-          🥗 Bahan
+        <button class="btn-nav-onehand btn-icon-only" onclick="switchTab('ingredients')" title="Lihat Bahan">
+          🥗
         </button>
         <button class="btn-nav-onehand btn-prev" id="btn-prev" onclick="prevStep()" disabled>
           ◀ Balik
         </button>
         <button class="btn-nav-onehand btn-next" id="btn-next" onclick="nextStep()">
           Lanjut ➔
+        </button>
+        <button class="btn-nav-onehand btn-icon-only" id="sensor-pill" onclick="toggleCameraGesture()" title="Sensor Kepala">
+          <span id="sensor-pill-icon">🗣️</span>
         </button>
       </div>
     </div>

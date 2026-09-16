@@ -141,9 +141,8 @@ let faceMesh = null;
 let mpCamera = null;
 
 async function toggleCameraGesture() {
-  const pill = document.getElementById('sensor-pill');
-  const pillIcon = document.getElementById('sensor-pill-icon');
-  const pillText = document.getElementById('sensor-pill-text');
+  const sensorBtn = document.getElementById('sensor-pill');
+  const sensorIcon = document.getElementById('sensor-pill-icon');
   let video = document.getElementById('webcam');
 
   if (isCameraActive) {
@@ -152,14 +151,13 @@ async function toggleCameraGesture() {
       cameraStream.getTracks().forEach(track => track.stop());
     }
     isCameraActive = false;
-    pill.classList.remove('active');
-    pillIcon.innerText = '🗣️';
-    pillText.innerText = 'Aktifkan Sensor Kepala';
+    sensorBtn.classList.remove('active');
+    sensorIcon.innerText = '🗣️';
     return;
   }
 
   try {
-    pillText.innerText = 'Menyiapkan AI...';
+    sensorIcon.innerText = '⏳';
     
     if (!video) {
       video = document.createElement('video');
@@ -196,11 +194,10 @@ async function toggleCameraGesture() {
     await video.play();
 
     isCameraActive = true;
-    pill.classList.add('active');
-    pillIcon.innerText = '🟢';
-    pillText.innerText = 'Sensor Aktif (Miringkan Kepala)';
+    sensorBtn.classList.add('active');
+    sensorIcon.innerText = '🟢';
 
-    // Process frames directly with requestAnimationFrame (100% native Safari iOS compatible)
+    // Process frames directly with requestAnimationFrame
     async function processVideoFrame() {
       if (!isCameraActive) return;
       if (video.readyState >= 2) {
@@ -213,9 +210,8 @@ async function toggleCameraGesture() {
   } catch (err) {
     console.error('Camera/MediaPipe error:', err);
     alert('Izin kamera diperlukan untuk sensor miring kepala di browser Safari/Chrome.');
-    pill.classList.remove('active');
-    pillIcon.innerText = '🗣️';
-    pillText.innerText = 'Aktifkan Sensor Kepala';
+    sensorBtn.classList.remove('active');
+    sensorIcon.innerText = '🗣️';
   }
 }
 
@@ -237,17 +233,17 @@ function onFaceResults(results) {
 
   // Threshold: ±10° to 12° tilt (ringan & sangat santai)
   if (angleDeg < -10) {
-    triggerHeadGesture('next', '👉 Kepala Miring Kanan: Lanjut!');
+    triggerHeadGesture('next');
   } else if (angleDeg > 10) {
-    triggerHeadGesture('prev', '👈 Kepala Miring Kiri: Balik!');
+    triggerHeadGesture('prev');
   }
 }
 
-function triggerHeadGesture(direction, text) {
+function triggerHeadGesture(direction) {
   gestureCooldown = true;
-  const pillText = document.getElementById('sensor-pill-text');
-  if (pillText) {
-    pillText.innerText = text;
+  const sensorIcon = document.getElementById('sensor-pill-icon');
+  if (sensorIcon) {
+    sensorIcon.innerText = direction === 'next' ? '👉' : '👈';
   }
 
   if (direction === 'next') {
@@ -259,8 +255,8 @@ function triggerHeadGesture(direction, text) {
   // Cooldown 1.5s so user can straighten head back without double-trigger
   setTimeout(() => {
     gestureCooldown = false;
-    if (pillText && isCameraActive) {
-      pillText.innerText = 'Sensor Aktif (Miringkan Kepala)';
+    if (sensorIcon && isCameraActive) {
+      sensorIcon.innerText = '🟢';
     }
   }, 1500);
 }

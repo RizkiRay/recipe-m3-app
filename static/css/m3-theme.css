@@ -395,51 +395,26 @@ body {
   z-index: 100;
   background: var(--md-sys-color-surface-container);
   border-top: 1px solid var(--md-sys-color-outline-variant);
-  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+  padding: 6px 12px calc(6px + env(safe-area-inset-bottom));
   box-shadow: var(--md-sys-elevation-3);
 }
 
 .bottom-bar-wrapper {
   max-width: 680px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.sensor-pill {
-  display: inline-flex;
-  align-items: center;
-  align-self: center;
-  gap: 6px;
-  background: var(--md-sys-color-surface-container-highest);
-  color: var(--md-sys-color-on-surface-variant);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  padding: 3px 12px;
-  border-radius: var(--md-sys-shape-corner-full);
-  font-size: 0.72rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.sensor-pill.active {
-  background: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
-  border-color: var(--md-sys-color-tertiary);
 }
 
 .bottom-action-buttons {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
 .btn-nav-onehand {
-  flex: 1;
-  height: 44px;
+  height: 42px;
   border-radius: var(--md-sys-shape-corner-full);
   border: none;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -447,6 +422,32 @@ body {
   gap: 4px;
   cursor: pointer;
   transition: transform 0.1s;
+}
+
+.btn-icon-only {
+  width: 42px;
+  flex: 0 0 42px;
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  font-size: 1.1rem;
+  padding: 0;
+}
+
+.btn-icon-only.active {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.btn-prev {
+  background: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
+  flex: 1;
+}
+
+.btn-next {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  flex: 1.5;
 }
 
 .btn-nav-onehand:active {
