@@ -15,9 +15,11 @@ def init_db():
         chef TEXT,
         description TEXT,
         youtube_id TEXT,
+        media_url TEXT,
         servings TEXT,
         prep_time TEXT,
         cook_time TEXT,
+        calories TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
@@ -57,27 +59,27 @@ def init_db():
     )
     """)
     
-    # Seed data: Egg Chicken Roll HokBen
+    # 1. Seed HokBen
     cursor.execute("SELECT id FROM recipes WHERE slug = 'egg-chicken-roll-hokben'")
-    existing = cursor.fetchone()
-    if not existing:
+    if not cursor.fetchone():
         cursor.execute("""
-        INSERT INTO recipes (slug, title, chef, description, youtube_id, servings, prep_time, cook_time)
+        INSERT INTO recipes (slug, title, chef, description, youtube_id, media_url, servings, prep_time, cook_time, calories)
         VALUES (
             'egg-chicken-roll-hokben',
             'Egg Chicken Roll ala HokBen',
             'Chef Devina Hermawan',
             'Juicy, gurih, kulit empuk berserat lembut, cocok untuk stok lauk beku (frozen food) keluarga.',
             'ShLeN8usfg8',
+            'https://youtu.be/ShLeN8usfg8',
             '4-5 Gulung (±25-30 potong)',
             '25 menit',
-            '20 menit kukus + 5 menit goreng'
+            '20 menit kukus + 5 menit goreng',
+            ''
         )
         """)
-        recipe_id = cursor.lastrowid
-        
-        # Groups
-        groups_data = [
+        r1_id = cursor.lastrowid
+        # Hokben groups & steps
+        g_data = [
             ('Bahan Kulit', [
                 ('Telur (atau 1 utuh + 2 kuning)', '2', 'butir', 'Gunakan 2 putih telur untuk isian daging'),
                 ('Tepung Terigu', '80', 'gr', 'Protein sedang'),
@@ -108,18 +110,13 @@ def init_db():
                 ('Minyak Goreng', 'secukupnya', '', 'Untuk menggoreng deep-fry')
             ])
         ]
+        for g_idx, (g_name, items) in enumerate(g_data):
+            cursor.execute("INSERT INTO ingredient_groups (recipe_id, name, sort_order) VALUES (?, ?, ?)", (r1_id, g_name, g_idx))
+            gid = cursor.lastrowid
+            for i_idx, it in enumerate(items):
+                cursor.execute("INSERT INTO ingredients (group_id, item, amount, unit, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?)", (gid, it[0], it[1], it[2], it[3], i_idx))
         
-        for g_idx, (g_name, items) in enumerate(groups_data):
-            cursor.execute("INSERT INTO ingredient_groups (recipe_id, name, sort_order) VALUES (?, ?, ?)", (recipe_id, g_name, g_idx))
-            group_id = cursor.lastrowid
-            for i_idx, item_tuple in enumerate(items):
-                cursor.execute("""
-                INSERT INTO ingredients (group_id, item, amount, unit, notes, sort_order)
-                VALUES (?, ?, ?, ?, ?, ?)
-                """, (group_id, item_tuple[0], item_tuple[1], item_tuple[2], item_tuple[3], i_idx))
-        
-        # Steps
-        steps_data = [
+        s_data = [
             (1, 'Buat Adonan Kulit', 'Campur terigu, maizena, telur, air, minyak, garam, kaldu bubuk, dan pewarna kuning. Aduk rata menggunakan whisk hingga licin tanpa gumpalan, lalu saring.', 0),
             (2, 'Dadar Kulit Dadar', 'Panaskan wajan teflon anti-lengket (api kecil-sedang). Tuang 1 centong adonan, putar wajan hingga rata. Masak sampai pinggir kulit terkelupas sendiri. Angkat dan dinginkan. Ulangi sampai adonan habis.', 0),
             (3, 'Giling Daging Pertama', 'Keringkan paha ayam fillet. Masukkan ayam, garam, gula, dan kaldu bubuk ke dalam food processor. Giling 2-3 menit sampai serat protein pecah dan tekstur lengket/bouncy.', 180),
@@ -129,17 +126,70 @@ def init_db():
             (7, 'Kukus Roll', 'Siapkan kukusan yang dialasi baking paper/dioles minyak. Kukus Egg Chicken Roll selama 15-20 menit hingga matang. Angkat dan biarkan dingin sempurna agar set & mudah dipotong.', 1200),
             (8, 'Potong & Goreng', 'Potong serong roll yang sudah dingin. Goreng dalam minyak panas dengan api sedang hingga kuning keemasan dan renyah di luar. Sajikan hangat dengan salad dan saus!', 300)
         ]
+        for st in s_data:
+            cursor.execute("INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds) VALUES (?, ?, ?, ?, ?)", (r1_id, st[0], st[1], st[2], st[3]))
+
+    # 2. Seed Instagram Recipe: Ayam Rebus Jahe Bawang Putih (Hendry Wijaya)
+    cursor.execute("SELECT id FROM recipes WHERE slug = 'ayam-rebus-jahe-bawang-putih'")
+    if not cursor.fetchone():
+        cursor.execute("""
+        INSERT INTO recipes (slug, title, chef, description, youtube_id, media_url, servings, prep_time, cook_time, calories)
+        VALUES (
+            'ayam-rebus-jahe-bawang-putih',
+            'Ayam Rebus Jahe Bawang Putih',
+            '@hendrywijayaa (Instagram)',
+            'Dada ayam rebus super empuk, lembut, juicy berkat teknik maizena & baking soda, disiram saus jahe bawang putih pedas gurih. Cocok untuk diet & meal-prep sehat.',
+            '',
+            'https://www.instagram.com/reel/DdGXJI4Bb4n/',
+            '1 Porsi (High Protein)',
+            '10 menit',
+            '5 menit rebus',
+            '675 kcal (+175g nasi putih) | Protein: 51g | Fat: 13g | Carbs: 82g'
+        )
+        """)
+        r2_id = cursor.lastrowid
         
-        for step in steps_data:
-            cursor.execute("""
-            INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds)
-            VALUES (?, ?, ?, ?, ?)
-            """, (recipe_id, step[0], step[1], step[2], step[3]))
-            
+        g2_data = [
+            ('Bahan Utama & Marinasi Ayam', [
+                ('Dada Ayam Fillet (Iris tipis melebar)', '200', 'gr', 'Potong berlawanan serat'),
+                ('Tepung Maizena', '25', 'gr', 'Kunci tekstur daging lembut velvety saat direbus'),
+                ('Baking Soda', 'secukupnya', 'sejumput', 'Melembutkan serat protein daging ayam')
+            ]),
+            ('Bahan Racikan Saus Jahe Bawang Putih', [
+                ('Bawang Putih (Cincang halus)', '5', 'gr', '±2 siung'),
+                ('Jahe (Cincang halus/parut)', '5', 'gr', 'Aroma segar khas oriental'),
+                ('Daun Bawang (Iris halus)', '10', 'gr', ''),
+                ('Cabe Rawit (Iris halus)', '5', 'gr', 'Sesuaikan level pedas'),
+                ('Chili Flakes / Bubuk Cabe Kasar', '2', 'gr', ''),
+                ('Chili Powder', 'secukupnya', '', 'Opsional untuk warna merah menggoda'),
+                ('Saus Tiram', '10', 'gr', '±1 sdm'),
+                ('Minyak Wijen', '3', 'gr', '±1 sdt'),
+                ('Gula Pasir', '3', 'gr', ''),
+                ('Garam', '3', 'gr', ''),
+                ('MSG / Kaldu Jamur', '3', 'gr', ''),
+                ('Minyak Panas', '5', 'gr', 'Untuk menyiram bumbu aromatik agar wangi keluar')
+            ])
+        ]
+        for g_idx, (g_name, items) in enumerate(g2_data):
+            cursor.execute("INSERT INTO ingredient_groups (recipe_id, name, sort_order) VALUES (?, ?, ?)", (r2_id, g_name, g_idx))
+            gid = cursor.lastrowid
+            for i_idx, it in enumerate(items):
+                cursor.execute("INSERT INTO ingredients (group_id, item, amount, unit, notes, sort_order) VALUES (?, ?, ?, ?, ?, ?)", (gid, it[0], it[1], it[2], it[3], i_idx))
+
+        s2_data = [
+            (1, 'Iris & Marinasi Dada Ayam', 'Iris tipis melebar 200 gr dada ayam fillet. Taburi 25 gr tepung maizena dan sejumput baking soda. Balurkan rata hingga seluruh permukaan ayam terlapisi tipis.', 0),
+            (2, 'Racik Bumbu Aromatik', 'Dalam mangkuk tahan panas, campurkan bawang putih cincang, jahe cincang, irisan daun bawang, cabe, chili flakes, chili powder, gula, garam, MSG, dan saus tiram.', 0),
+            (3, 'Siram Minyak Panas & Minyak Wijen', 'Panaskan 5-10 ml minyak goreng hingga berasap tipis. Siramkan minyak panas ke atas mangkuk bumbu aromatik agar aroma jahe dan bawang keluar semerbak. Tambahkan minyak wijen, lalu aduk rata.', 0),
+            (4, 'Rebus Dada Ayam', 'Didihkan air secukupnya dalam panci. Masukkan irisan dada ayam yang sudah dimarinasi maizena satu per satu. Rebus dengan api sedang selama 3-5 menit hingga ayam matang dan putih empuk.', 240),
+            (5, 'Tiriskan & Tuang Saus', 'Angkat dan tiriskan dada ayam rebus ke dalam piring saji. Tuangkan racikan saus jahe bawang putih di atasnya. Sajikan selagi hangat bersama 175 gr nasi putih hangat!', 0)
+        ]
+        for st in s2_data:
+            cursor.execute("INSERT INTO instructions (recipe_id, step_number, title, detail, timer_seconds) VALUES (?, ?, ?, ?, ?)", (r2_id, st[0], st[1], st[2], st[3]))
+
     conn.commit()
     conn.close()
 
-def get_recipe_by_slug(slug='egg-chicken-roll-hokben'):
+def get_recipe_by_slug(slug='ayam-rebus-jahe-bawang-putih'):
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -152,7 +202,6 @@ def get_recipe_by_slug(slug='egg-chicken-roll-hokben'):
     
     recipe_dict = dict(recipe)
     
-    # Get groups and ingredients
     cursor.execute("SELECT * FROM ingredient_groups WHERE recipe_id = ? ORDER BY sort_order", (recipe['id'],))
     groups = cursor.fetchall()
     recipe_dict['ingredient_groups'] = []
@@ -162,7 +211,6 @@ def get_recipe_by_slug(slug='egg-chicken-roll-hokben'):
         g_dict['ingredients_list'] = [dict(i) for i in cursor.fetchall()]
         recipe_dict['ingredient_groups'].append(g_dict)
         
-    # Get instructions
     cursor.execute("SELECT * FROM instructions WHERE recipe_id = ? ORDER BY step_number", (recipe['id'],))
     recipe_dict['instructions'] = [dict(s) for s in cursor.fetchall()]
     
@@ -173,11 +221,11 @@ def get_all_recipes():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute("SELECT id, slug, title, chef, description, youtube_id, prep_time, cook_time FROM recipes ORDER BY id DESC")
+    cursor.execute("SELECT id, slug, title, chef, description, youtube_id, media_url, prep_time, cook_time, calories FROM recipes ORDER BY id DESC")
     recipes = [dict(r) for r in cursor.fetchall()]
     conn.close()
     return recipes
 
 if __name__ == "__main__":
     init_db()
-    print("Database initialized successfully with SQLite.")
+    print("Database updated and initialized successfully.")

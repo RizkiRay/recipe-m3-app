@@ -28,16 +28,26 @@
 
   <main class="container">
     
-    <!-- Video & Recipe Summary Card -->
+    <!-- Video / Media Summary Card -->
     <div class="video-card">
-      <div class="video-wrapper">
-        <iframe 
-          src="https://www.youtube.com/embed/{{ recipe.youtube_id }}?enablejsapi=1" 
-          title="Video Resep YouTube" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-      </div>
+      {% if recipe.youtube_id %}
+        <div class="video-wrapper">
+          <iframe 
+            src="https://www.youtube.com/embed/{{ recipe.youtube_id }}?enablejsapi=1" 
+            title="Video Resep YouTube" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      {% elif recipe.media_url %}
+        <div class="media-banner">
+          <a href="{{ recipe.media_url }}" target="_blank" class="media-link-banner">
+            <i data-lucide="instagram" style="width: 20px; height: 20px;"></i>
+            <span>Buka Video Instagram Reel</span>
+            <i data-lucide="external-link" style="width: 16px; height: 16px; margin-left: auto;"></i>
+          </a>
+        </div>
+      {% endif %}
       <div class="recipe-header-card">
         <h2 class="recipe-title">{{ recipe.title }}</h2>
         <div class="recipe-chef">
