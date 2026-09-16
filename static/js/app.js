@@ -32,7 +32,7 @@ function switchTab(tab) {
 
 function toggleIngredient(card) {
   card.classList.toggle('checked');
-  const checkIcon = card.querySelector('.custom-checkbox .material-symbols-outlined');
+  const checkIcon = card.querySelector('.check-icon');
   if (checkIcon) {
     checkIcon.style.display = card.classList.contains('checked') ? 'inline-block' : 'none';
   }
@@ -63,14 +63,15 @@ function renderStep(idx) {
   const btnNext = document.getElementById('btn-next');
   if (btnNext) {
     if (idx === steps.length - 1) {
-      btnNext.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Selesai';
+      btnNext.innerHTML = '<i data-lucide="check-circle" style="width: 18px; height: 18px;"></i> Selesai';
       btnNext.style.background = 'var(--md-sys-color-tertiary)';
       btnNext.style.color = 'var(--md-sys-color-on-tertiary)';
     } else {
-      btnNext.innerHTML = 'Lanjut <span class="material-symbols-outlined">arrow_forward</span>';
+      btnNext.innerHTML = 'Lanjut <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>';
       btnNext.style.background = 'var(--md-sys-color-primary)';
       btnNext.style.color = 'var(--md-sys-color-on-primary)';
     }
+    if (window.lucide) lucide.createIcons();
   }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -100,7 +101,8 @@ function startTimer(id, initialSeconds) {
     // Pause / Stop
     clearInterval(timers[id].interval);
     timers[id].interval = null;
-    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">play_arrow</span> Mulai';
+    btn.innerHTML = '<i data-lucide="play" style="width: 16px; height: 16px;"></i> Mulai';
+    if (window.lucide) lucide.createIcons();
     return;
   }
 
@@ -108,7 +110,8 @@ function startTimer(id, initialSeconds) {
     timers[id] = { remaining: initialSeconds, interval: null };
   }
 
-  btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">pause</span> Jeda';
+  btn.innerHTML = '<i data-lucide="pause" style="width: 16px; height: 16px;"></i> Jeda';
+  if (window.lucide) lucide.createIcons();
   
   timers[id].interval = setInterval(() => {
     timers[id].remaining--;
@@ -119,9 +122,10 @@ function startTimer(id, initialSeconds) {
     if (timers[id].remaining <= 0) {
       clearInterval(timers[id].interval);
       timers[id].interval = null;
-      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px;">done</span> Selesai';
+      btn.innerHTML = '<i data-lucide="check" style="width: 16px; height: 16px;"></i> Selesai';
       btn.style.background = 'var(--md-sys-color-primary)';
       display.textContent = '00:00 — SELESAI';
+      if (window.lucide) lucide.createIcons();
       if ('vibrate' in navigator) navigator.vibrate([300, 100, 300]);
     }
   }, 1000);
@@ -261,6 +265,8 @@ function triggerHeadGesture(direction) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (window.lucide) lucide.createIcons();
+  
   const cookSection = document.getElementById('section-cooking');
   cookSection.addEventListener('touchstart', e => {
     touchStartX = e.changedTouches[0].screenX;

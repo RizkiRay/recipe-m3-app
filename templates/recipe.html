@@ -8,7 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <!-- Lucide Modern SVG Icons (100% Guaranteed SVG Render, No Font Glitch) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
   
   <!-- MediaPipe Face Mesh -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
@@ -19,7 +20,7 @@
   <header class="top-app-bar">
     <div class="brand-wrapper">
       <div class="brand-icon">
-        <span class="material-symbols-outlined">menu_book</span>
+        <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
       </div>
       <h1>Buku Resep</h1>
     </div>
@@ -40,24 +41,24 @@
       <div class="recipe-header-card">
         <h2 class="recipe-title">{{ recipe.title }}</h2>
         <div class="recipe-chef">
-          <span class="material-symbols-outlined" style="font-size: 16px;">restaurant</span>
+          <i data-lucide="utensils" style="width: 16px; height: 16px;"></i>
           Oleh {{ recipe.chef }}
         </div>
         <p class="recipe-desc">{{ recipe.description }}</p>
         
         <div class="recipe-meta-row">
           <div class="meta-chip">
-            <span class="material-symbols-outlined">schedule</span>
+            <i data-lucide="clock" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
             <span class="meta-label">Persiapan</span>
             <span class="meta-value">{{ recipe.prep_time }}</span>
           </div>
           <div class="meta-chip">
-            <span class="material-symbols-outlined">skillet</span>
+            <i data-lucide="flame" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
             <span class="meta-label">Masak</span>
             <span class="meta-value">{{ recipe.cook_time }}</span>
           </div>
           <div class="meta-chip">
-            <span class="material-symbols-outlined">group</span>
+            <i data-lucide="users" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
             <span class="meta-label">Porsi</span>
             <span class="meta-value">{{ recipe.servings }}</span>
           </div>
@@ -68,11 +69,11 @@
     <!-- Clean Segmented Control Tabs -->
     <div class="view-mode-tabs">
       <button class="tab-btn active" id="tab-ingredients" onclick="switchTab('ingredients')">
-        <span class="material-symbols-outlined">checklist</span>
+        <i data-lucide="list-checks" style="width: 16px; height: 16px;"></i>
         Bahan & Takaran
       </button>
       <button class="tab-btn" id="tab-cooking" onclick="switchTab('cooking')">
-        <span class="material-symbols-outlined">outdoor_grill</span>
+        <i data-lucide="chef-hat" style="width: 16px; height: 16px;"></i>
         Mode Masak
       </button>
     </div>
@@ -81,14 +82,14 @@
     <section id="section-ingredients">
       {% for group in recipe.ingredient_groups %}
         <div class="group-title">
-          <span class="material-symbols-outlined" style="font-size: 16px;">inventory_2</span>
+          <i data-lucide="package" style="width: 15px; height: 15px;"></i>
           {{ group.name }}
         </div>
         {% for item in group.ingredients_list %}
           <div class="ingredient-card" onclick="toggleIngredient(this)">
             <div class="ing-left">
               <div class="custom-checkbox">
-                <span class="material-symbols-outlined" style="font-size: 14px; display: none;">check</span>
+                <i data-lucide="check" class="check-icon" style="width: 14px; height: 14px; display: none;"></i>
               </div>
               <div>
                 <div class="ing-title">{{ item.item }}</div>
@@ -104,7 +105,7 @@
       
       <div style="margin-top: 24px;">
         <button class="btn-nav-onehand btn-next" style="width: 100%; height: 48px;" onclick="switchTab('cooking')">
-          <span class="material-symbols-outlined">play_arrow</span>
+          <i data-lucide="play" style="width: 18px; height: 18px;"></i>
           Mulai Memasak
         </button>
       </div>
@@ -123,7 +124,7 @@
           <div class="cook-step-card">
             <div>
               <span class="step-badge">
-                <span class="material-symbols-outlined" style="font-size: 14px;">format_list_numbered</span>
+                <i data-lucide="list-ordered" style="width: 14px; height: 14px;"></i>
                 Langkah {{ step.step_number }} dari {{ recipe.instructions|length }}
               </span>
               <h3 class="step-heading">{{ step.title }}</h3>
@@ -139,7 +140,7 @@
                   </div>
                 </div>
                 <button class="btn-timer" id="btn-timer-{{ step.id }}" onclick="startTimer('{{ step.id }}', {{ step.timer_seconds }})">
-                  <span class="material-symbols-outlined" style="font-size: 18px;">play_arrow</span>
+                  <i data-lucide="play" style="width: 16px; height: 16px;"></i>
                   Mulai
                 </button>
               </div>
@@ -156,18 +157,18 @@
     <div class="bottom-bar-wrapper">
       <div class="bottom-action-buttons">
         <button class="btn-nav-onehand btn-icon-only" onclick="switchTab('ingredients')" title="Lihat Bahan">
-          <span class="material-symbols-outlined">list_alt</span>
+          <i data-lucide="list" style="width: 20px; height: 20px;"></i>
         </button>
         <button class="btn-nav-onehand btn-prev" id="btn-prev" onclick="prevStep()" disabled>
-          <span class="material-symbols-outlined">arrow_back</span>
+          <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
           Balik
         </button>
         <button class="btn-nav-onehand btn-next" id="btn-next" onclick="nextStep()">
           Lanjut
-          <span class="material-symbols-outlined">arrow_forward</span>
+          <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
         </button>
         <button class="btn-nav-onehand btn-icon-only" id="sensor-pill" onclick="toggleCameraGesture()" title="Sensor Miring Kepala">
-          <span class="material-symbols-outlined" id="sensor-pill-icon">face</span>
+          <i data-lucide="smile" id="sensor-pill-icon" style="width: 20px; height: 20px;"></i>
         </button>
       </div>
     </div>
