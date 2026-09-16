@@ -215,16 +215,13 @@ function onFaceResults(results) {
 
   const status = document.getElementById('cam-status');
   
-  // Threshold: ±30° to 45° tilt
-  // Because camera is mirrored (facing user):
-  // User tilts head to their RIGHT -> rightEye moves higher/lower accordingly
-  // Standard threshold 35° (comfortable 30°-45°)
-  if (angleDeg < -30) {
+  // Threshold: ±18° to 20° tilt (natural, slight head tilt)
+  if (angleDeg < -18) {
     // Tilted right
-    triggerHeadGesture('next', '👉 Kepala Miring Kanan (~45°): Langkah Berikutnya!');
-  } else if (angleDeg > 30) {
+    triggerHeadGesture('next', '👉 Kepala Miring Kanan: Langkah Berikutnya!');
+  } else if (angleDeg > 18) {
     // Tilted left
-    triggerHeadGesture('prev', '👈 Kepala Miring Kiri (~45°): Langkah Sebelumnya!');
+    triggerHeadGesture('prev', '👈 Kepala Miring Kiri: Langkah Sebelumnya!');
   }
 }
 
