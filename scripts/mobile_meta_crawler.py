@@ -61,7 +61,7 @@ def parse_og_recipe(shortcode, og_title, og_desc):
     
     for l in lines:
         lower = l.lower()
-        if any(lower.startswith(k) for k in ['teknik', 'cara', 'step', 'instruction', 'langkah', 'tutorial']):
+        if any(lower.startswith(k) for k in ['teknik', 'cara', 'step', 'instruction', 'langkah', 'tutorial', 'method', 'how to', 'directions']):
             if current_items:
                 groups.append((current_group_name, current_items))
                 current_items = []
@@ -76,12 +76,12 @@ def parse_og_recipe(shortcode, og_title, og_desc):
             continue
             
         if not in_steps:
-            if any(lower.startswith(k) for k in ['bahan', 'ingredient']):
+            if any(lower.startswith(k) for k in ['bahan', 'ingredient', 'method', 'cara']):
                 continue
-            if len(l) > 2 and not any(lower == np or lower.startswith(np + ':') for np in noise_patterns):
-                # Clean item bullet
+            if len(l) > 2 and not any(lower == np or lower.startswith(np + ':') or lower.startswith(np) for np in noise_patterns) and not l.startswith('#'):
+                # Clean item bullet and ensure it is not an action sentence
                 clean_item = re.sub(r'^[•\-\*\d\.\s]+', '', l)
-                if clean_item and len(clean_item) > 2:
+                if clean_item and len(clean_item) > 2 and not any(clean_item.lower().startswith(v) for v in ['peel ', 'boil ', 'heat ', 'fry ', 'remove ', 'place ', 'mix ', 'add ', 'mash ', 'take ', 'use ']):
                     current_items.append((clean_item, '', '', ''))
         else:
             if len(l) > 3 and not any(lower.startswith(np) for np in ['http', '#', 'follow', 'save', 'view', 'reply', 'liked']):
