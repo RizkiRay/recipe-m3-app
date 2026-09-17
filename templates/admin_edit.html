@@ -147,20 +147,38 @@
       right: 0;
       background: var(--md-sys-color-surface-container);
       border-top: 1px solid var(--md-sys-color-outline-variant);
-      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       z-index: 100;
       box-shadow: var(--md-sys-elevation-3);
     }
-    .editor-bottom-bar .btn-action {
+    .btn-editor-action {
       flex: 1;
       height: 48px;
+      border-radius: var(--md-sys-shape-corner-full);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.92rem;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-editor-action:active {
+      transform: scale(0.97);
+    }
+    .btn-editor-action.primary {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-color: var(--md-sys-color-primary);
     }
   </style>
 </head>
@@ -309,11 +327,12 @@
 
   <!-- Sticky Bottom Save Bar -->
   <footer class="editor-bottom-bar">
-    <a href="/admin" class="btn-action">
+    <a href="/admin" class="btn-editor-action">
+      <i data-lucide="x" style="width: 18px; height: 18px;"></i>
       Batal
     </a>
-    <button type="button" class="btn-action primary" onclick="saveRecipeData()">
-      <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+    <button type="button" class="btn-editor-action primary" onclick="saveRecipeData()">
+      <i data-lucide="save" style="width: 18px; height: 18px;"></i>
       Simpan Resep
     </button>
   </footer>
