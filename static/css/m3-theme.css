@@ -85,7 +85,7 @@ body {
   background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
   line-height: 1.5;
-  padding-bottom: 85px;
+  padding-bottom: 96px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -111,34 +111,37 @@ body {
   top: 0;
   z-index: 50;
   background: var(--md-sys-color-surface);
-  padding: 14px 20px;
+  padding: 16px 20px;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  box-shadow: var(--md-sys-elevation-1);
 }
 
 .brand-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .brand-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--md-sys-shape-corner-small);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--md-sys-shape-corner-medium);
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .top-app-bar h1 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--md-sys-color-on-surface);
 }
 
@@ -150,14 +153,15 @@ body {
   background: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface);
   border: 1px solid var(--md-sys-color-outline-variant);
-  padding: 6px 12px;
+  padding: 8px 14px;
+  min-height: 40px;
   border-radius: var(--md-sys-shape-corner-full);
   font-family: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
   outline: none;
-  max-width: 170px;
+  max-width: 180px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -730,38 +734,41 @@ body {
   z-index: 100;
   background: var(--md-sys-color-surface-container);
   border-top: 1px solid var(--md-sys-color-outline-variant);
-  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-  box-shadow: var(--md-sys-elevation-2);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  box-shadow: var(--md-sys-elevation-3);
+  min-height: 72px;
 }
 
 .bottom-bar-wrapper {
+  max-width: 680px;
+  margin: 0 auto;
   width: 100%;
 }
 
 .bottom-action-buttons {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
 }
 
 .btn-nav-onehand {
-  height: 48px;
+  height: 52px; /* Ergonomic 52dp thumb target */
   border-radius: var(--md-sys-shape-corner-medium);
   border: none;
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .btn-icon-only {
-  width: 48px;
-  flex: 0 0 48px;
+  width: 52px;
+  flex: 0 0 52px;
   background: var(--md-sys-color-surface-container-highest);
   color: var(--md-sys-color-on-surface);
   padding: 0;
