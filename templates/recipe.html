@@ -110,7 +110,12 @@
               <div class="custom-checkbox">
                 <i data-lucide="check" class="check-icon" style="width: 14px; height: 14px; display: none;"></i>
               </div>
-              <div class="ing-title">{{ item.item }}</div>
+              <div>
+                <div class="ing-title">{{ item.item }}</div>
+                {% if item.notes and item.notes|length > 2 and item.notes|lower != item.item|lower %}
+                  <div class="ing-notes">{{ item.notes }}</div>
+                {% endif %}
+              </div>
             </div>
             {% if item.amount or item.unit %}
               <div class="ing-qty">{{ item.amount }} {{ item.unit }}</div>
