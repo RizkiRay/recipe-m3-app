@@ -9,6 +9,85 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .catalog-search-wrapper {
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .catalog-search-input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      background: var(--md-sys-color-surface-container-high);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-full);
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .catalog-search-input:focus {
+      border-color: var(--md-sys-color-primary);
+    }
+    .catalog-search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--md-sys-color-outline);
+    }
+    .filter-chip-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      scrollbar-width: none;
+    }
+    .filter-chip-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .filter-chip {
+      white-space: nowrap;
+      padding: 7px 14px;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      color: var(--md-sys-color-on-surface-variant);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .filter-chip.active {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-color: var(--md-sys-color-primary);
+    }
+    .recipe-tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-primary);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--md-sys-shape-corner-full);
+      margin-right: 4px;
+    }
+    .no-results-box {
+      text-align: center;
+      padding: 40px 16px;
+      color: var(--md-sys-color-outline);
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
@@ -18,31 +97,75 @@
       <div class="brand-icon">
         <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
       </div>
-      <h1>Katalog Resep</h1>
+      <h1>Buku Resep</h1>
     </div>
     <div style="display: flex; align-items: center; gap: 8px;">
       <a href="/admin" class="btn-action" style="padding: 6px 12px; font-size: 0.78rem;">
         <i data-lucide="settings" style="width: 14px; height: 14px;"></i>
         Admin
       </a>
-      <span style="font-size: 0.8rem; font-weight: 700; color: var(--md-sys-color-primary);">
+      <span style="font-size: 0.8rem; font-weight: 700; color: var(--md-sys-color-primary);" id="recipeCountLabel">
         {{ all_recipes|length }} Resep
       </span>
     </div>
   </header>
 
-  <main class="container" style="padding-top: 20px;">
+  <main class="container" style="padding-top: 16px;">
     
-    <!-- Hero Banner / Greeting -->
-    <div class="catalog-hero">
-      <div class="hero-title">Mau Masak Apa Hari Ini?</div>
-      <p class="hero-sub">Pilih resep favorit, siapkan bahan, dan ikuti panduan memasak bebas sentuh.</p>
+    <!-- Hero Title -->
+    <div class="catalog-hero" style="margin-bottom: 16px;">
+      <div class="hero-title">Koleksi Resep Dapur</div>
+      <p class="hero-sub">Pilih resep, siapkan bahan, dan masak bebas sentuh dengan sensor kepala.</p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="catalog-search-wrapper">
+      <i data-lucide="search" class="catalog-search-icon" style="width: 18px; height: 18px;"></i>
+      <input type="text" id="catalogSearch" class="catalog-search-input" placeholder="Cari resep, bahan (ayam, sambal, ramen)..." oninput="applyFilter()">
+    </div>
+
+    <!-- Category Filter Chips -->
+    <div class="filter-chip-bar">
+      <button class="filter-chip active" onclick="setCategoryFilter('all', this)">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> Semua
+      </button>
+      <button class="filter-chip" onclick="setCategoryFilter('ayam', this)">
+        🍗 Olahan Ayam
+      </button>
+      <button class="filter-chip" onclick="setCategoryFilter('sapi', this)">
+        🥩 Daging Sapi
+      </button>
+      <button class="filter-chip" onclick="setCategoryFilter('seafood', this)">
+        🦐 Seafood & Ikan
+      </button>
+      <button class="filter-chip" onclick="setCategoryFilter('mie', this)">
+        🍜 Mie & Ramen
+      </button>
+      <button class="filter-chip" onclick="setCategoryFilter('camilan', this)">
+        🥔 Camilan & Snack
+      </button>
+      <button class="filter-chip" onclick="setCategoryFilter('sambal', this)">
+        🌶️ Sambal & Saus
+      </button>
+      <button class="filter-chip" onclick="setCategoryFilter('sehat', this)">
+        🥗 Diet & High Protein
+      </button>
+    </div>
+
+    <!-- No Results Message -->
+    <div id="noResults" class="no-results-box">
+      <i data-lucide="search-x" style="width: 48px; height: 48px; margin-bottom: 8px; opacity: 0.6;"></i>
+      <div style="font-weight: 700; font-size: 1.05rem;">Resep Tidak Ditemukan</div>
+      <p style="font-size: 0.85rem; margin-top: 4px;">Coba gunakan kata kunci lain seperti ayam, sambal, atau kentang.</p>
     </div>
 
     <!-- Recipe Grid / List -->
-    <div class="catalog-grid">
+    <div class="catalog-grid" id="catalogGrid">
       {% for r in all_recipes %}
-        <a href="/recipe/{{ r.slug }}" class="catalog-card">
+        <a href="/recipe/{{ r.slug }}" class="catalog-card" 
+           data-title="{{ r.title|lower }}" 
+           data-chef="{{ r.chef|lower }}" 
+           data-desc="{{ r.description|lower }}">
           <div class="catalog-card-media">
             {% if r.youtube_id %}
               <img src="https://img.youtube.com/vi/{{ r.youtube_id }}/mqdefault.jpg" alt="{{ r.title }}" class="catalog-thumb">
@@ -59,6 +182,31 @@
             {% endif %}
           </div>
           <div class="catalog-card-body">
+            <!-- Dynamic Category Tag Pills -->
+            <div style="margin-bottom: 6px;">
+              {% if 'ayam' in r.title|lower or 'chicken' in r.title|lower or 'ayam' in r.description|lower %}
+                <span class="recipe-tag-pill">🍗 Ayam</span>
+              {% endif %}
+              {% if 'sapi' in r.title|lower or 'beef' in r.title|lower or 'daging' in r.title|lower %}
+                <span class="recipe-tag-pill">🥩 Sapi</span>
+              {% endif %}
+              {% if 'udang' in r.title|lower or 'cumi' in r.title|lower or 'ikan' in r.title|lower or 'shrimp' in r.title|lower or 'squid' in r.title|lower or 'fish' in r.title|lower %}
+                <span class="recipe-tag-pill">🦐 Seafood</span>
+              {% endif %}
+              {% if 'ramen' in r.title|lower or 'noodle' in r.title|lower or 'pho' in r.title|lower or 'mie' in r.title|lower %}
+                <span class="recipe-tag-pill">🍜 Noodle</span>
+              {% endif %}
+              {% if 'sambal' in r.title|lower or 'tare' in r.title|lower or 'oil' in r.title|lower or 'saus' in r.title|lower %}
+                <span class="recipe-tag-pill">🌶️ Sambal</span>
+              {% endif %}
+              {% if 'potato' in r.title|lower or 'tahu' in r.title|lower or 'nugget' in r.title|lower or 'chips' in r.title|lower or 'snack' in r.title|lower or 'dimsum' in r.title|lower or 'takoyaki' in r.title|lower or 'pancake' in r.title|lower %}
+                <span class="recipe-tag-pill">🥔 Snack</span>
+              {% endif %}
+              {% if 'high protein' in r.title|lower or 'low carb' in r.title|lower or 'diet' in r.title|lower or 'sehat' in r.description|lower or 'rebus' in r.title|lower or 'brining' in r.title|lower %}
+                <span class="recipe-tag-pill">🥗 Healthy</span>
+              {% endif %}
+            </div>
+
             <h2 class="catalog-title">{{ r.title }}</h2>
             <div class="catalog-chef">
               <i data-lucide="utensils" style="width: 14px; height: 14px;"></i>
@@ -88,9 +236,64 @@
   </main>
 
   <script>
+    let activeCategory = 'all';
+
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
     });
+
+    function setCategoryFilter(category, btn) {
+      activeCategory = category;
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const q = document.getElementById('catalogSearch').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.catalog-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const title = card.dataset.title || '';
+        const chef = card.dataset.chef || '';
+        const desc = card.dataset.desc || '';
+        const fullText = `${title} ${chef} ${desc}`;
+
+        // Text Search Match
+        const matchesSearch = !q || fullText.includes(q);
+
+        // Category Tag Match
+        let matchesCategory = false;
+        if (activeCategory === 'all') {
+          matchesCategory = true;
+        } else if (activeCategory === 'ayam') {
+          matchesCategory = fullText.includes('ayam') || fullText.includes('chicken');
+        } else if (activeCategory === 'sapi') {
+          matchesCategory = fullText.includes('sapi') || fullText.includes('beef') || fullText.includes('daging');
+        } else if (activeCategory === 'seafood') {
+          matchesCategory = fullText.includes('udang') || fullText.includes('cumi') || fullText.includes('ikan') || fullText.includes('shrimp') || fullText.includes('fish') || fullText.includes('squid');
+        } else if (activeCategory === 'mie') {
+          matchesCategory = fullText.includes('ramen') || fullText.includes('mie') || fullText.includes('noodle') || fullText.includes('pho');
+        } else if (activeCategory === 'camilan') {
+          matchesCategory = fullText.includes('potato') || fullText.includes('tahu') || fullText.includes('nugget') || fullText.includes('chips') || fullText.includes('snack') || fullText.includes('takoyaki') || fullText.includes('pancake') || fullText.includes('dimsum');
+        } else if (activeCategory === 'sambal') {
+          matchesCategory = fullText.includes('sambal') || fullText.includes('tare') || fullText.includes('oil') || fullText.includes('saus');
+        } else if (activeCategory === 'sehat') {
+          matchesCategory = fullText.includes('protein') || fullText.includes('diet') || fullText.includes('sehat') || fullText.includes('low carb') || fullText.includes('rebus') || fullText.includes('brining') || fullText.includes('tanpa minyak');
+        }
+
+        if (matchesSearch && matchesCategory) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+      document.getElementById('recipeCountLabel').innerText = `${visibleCount} Resep`;
+    }
   </script>
 </body>
 </html>
