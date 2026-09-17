@@ -19,6 +19,11 @@ async def index(request: Request):
     all_recipes = get_all_recipes()
     return templates.TemplateResponse(request=request, name="catalog.html", context={"all_recipes": all_recipes})
 
+@app.get("/catalog", response_class=HTMLResponse)
+async def catalog_view(request: Request):
+    all_recipes = get_all_recipes()
+    return templates.TemplateResponse(request=request, name="catalog.html", context={"all_recipes": all_recipes})
+
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_dashboard(request: Request):
     conn = sqlite3.connect(database.DB_PATH)
