@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Buku Resep</title>
+  <link rel="stylesheet" href="/static/css/m3-theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .admin-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .admin-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--md-sys-color-on-surface);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .search-box {
+      width: 100%;
+      max-width: 320px;
+      padding: 10px 14px 10px 38px;
+      background: var(--md-sys-color-surface-container-high);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-full);
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .search-wrapper {
+      position: relative;
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--md-sys-color-outline);
+    }
+    .recipe-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+    }
+    .recipe-row {
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      transition: background 0.15s;
+    }
+    .recipe-row td {
+      padding: 14px 16px;
+      vertical-align: middle;
+    }
+    .recipe-row td:first-child {
+      border-radius: var(--md-sys-shape-corner-medium) 0 0 var(--md-sys-shape-corner-medium);
+    }
+    .recipe-row td:last-child {
+      border-radius: 0 var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium) 0;
+    }
+    .badge-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: var(--md-sys-shape-corner-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    .btn-action {
+      padding: 8px 14px;
+      border-radius: var(--md-sys-shape-corner-full);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface-container-highest);
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-action.primary {
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border-color: var(--md-sys-color-primary);
+    }
+    .btn-action.danger {
+      color: #ba1a1a;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-large);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--md-sys-color-primary);
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--md-sys-color-outline);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header class="top-app-bar">
+    <div class="brand-wrapper">
+      <a href="/catalog" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
+        <div class="brand-icon">
+          <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+        </div>
+        <h1>Buku Resep</h1>
+      </a>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <a href="/catalog" class="btn-action">
+        <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
+        Katalog Web
+      </a>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Resep Terverifikasi</span>
+        <span class="stat-value">{{ recipes|length }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Bahan Masakan</span>
+        <span class="stat-value">{{ total_ingredients }}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Total Langkah Memasak</span>
+        <span class="stat-value">{{ total_steps }}</span>
+      </div>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="admin-header">
+      <div class="admin-title">
+        <i data-lucide="shield-check" style="width: 24px; height: 24px; color: var(--md-sys-color-primary);"></i>
+        Manajemen Data Resep
+      </div>
+      <div class="search-wrapper">
+        <i data-lucide="search" class="search-icon" style="width: 16px; height: 16px;"></i>
+        <input type="text" id="recipeSearch" class="search-box" placeholder="Cari resep atau koki..." oninput="filterRecipes()">
+      </div>
+    </div>
+
+    <!-- Recipe List Table -->
+    <div style="overflow-x: auto;">
+      <table class="recipe-table">
+        <tbody>
+          {% for r in recipes %}
+            <tr class="recipe-row" id="row-{{ r.id }}" data-title="{{ r.title|lower }}" data-chef="{{ r.chef|lower }}">
+              <td style="width: 50px; font-weight: 700; color: var(--md-sys-color-outline);">
+                #{{ loop.index }}
+              </td>
+              <td>
+                <div style="font-weight: 800; font-size: 1rem; color: var(--md-sys-color-on-surface); margin-bottom: 2px;">
+                  {{ r.title }}
+                </div>
+                <div style="font-size: 0.8rem; color: var(--md-sys-color-primary); font-weight: 600;">
+                  {{ r.chef }}
+                  {% if r.media_url %}
+                    • <a href="{{ r.media_url }}" target="_blank" style="color: inherit; text-decoration: underline;">Video Asli ↗</a>
+                  {% endif %}
+                </div>
+              </td>
+              <td style="white-space: nowrap;">
+                <span class="badge-count">
+                  <i data-lucide="carrot" style="width: 14px; height: 14px;"></i>
+                  {{ r.ing_count }} Bahan
+                </span>
+                <span class="badge-count" style="margin-left: 6px;">
+                  <i data-lucide="list-ordered" style="width: 14px; height: 14px;"></i>
+                  {{ r.step_count }} Langkah
+                </span>
+              </td>
+              <td style="text-align: right; white-space: nowrap;">
+                <a href="/admin/edit/{{ r.id }}" class="btn-action primary">
+                  <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
+                  Edit Resep
+                </a>
+                <a href="/recipe/{{ r.slug }}" class="btn-action" target="_blank" title="Lihat Tampilan Masak">
+                  <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                </a>
+                <button onclick="deleteRecipe('{{ r.id }}', '{{ r.title|escape }}')" class="btn-action danger" title="Hapus">
+                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
+
+    function filterRecipes() {
+      const q = document.getElementById('recipeSearch').value.toLowerCase().trim();
+      document.querySelectorAll('.recipe-row').forEach(row => {
+        const title = row.dataset.title || '';
+        const chef = row.dataset.chef || '';
+        if (title.includes(q) || chef.includes(q)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+
+    async function deleteRecipe(id, title) {
+      if (!confirm(`Hapus resep "${title}" dari database?`)) return;
+      try {
+        const res = await fetch(`/api/admin/recipe/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          const row = document.getElementById(`row-${id}`);
+          if (row) row.remove();
+        } else {
+          alert('Gagal menghapus resep.');
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>

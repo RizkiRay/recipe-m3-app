@@ -20,9 +20,15 @@
       </div>
       <h1>Katalog Resep</h1>
     </div>
-    <span style="font-size: 0.8rem; font-weight: 700; color: var(--md-sys-color-primary);">
-      {{ all_recipes|length }} Koleksi
-    </span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <a href="/admin" class="btn-action" style="padding: 6px 12px; font-size: 0.78rem;">
+        <i data-lucide="settings" style="width: 14px; height: 14px;"></i>
+        Admin
+      </a>
+      <span style="font-size: 0.8rem; font-weight: 700; color: var(--md-sys-color-primary);">
+        {{ all_recipes|length }} Resep
+      </span>
+    </div>
   </header>
 
   <main class="container" style="padding-top: 20px;">
