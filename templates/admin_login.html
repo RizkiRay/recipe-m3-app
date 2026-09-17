@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin — Buku Resep</title>
+  <link rel="stylesheet" href="/static/css/m3-theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .login-wrapper {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 380px;
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-extra-large);
+      padding: 28px 24px;
+      box-shadow: var(--md-sys-elevation-2);
+    }
+    .login-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .login-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--md-sys-color-on-surface);
+      margin-bottom: 4px;
+    }
+    .login-sub {
+      font-size: 0.85rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 24px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--md-sys-color-outline);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .form-input {
+      padding: 12px 14px;
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      color: var(--md-sys-color-on-surface);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: var(--md-sys-color-primary);
+    }
+    .btn-submit {
+      width: 100%;
+      height: 46px;
+      margin-top: 8px;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border: none;
+      border-radius: var(--md-sys-shape-corner-full);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s;
+    }
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+    .error-msg {
+      background: #ffdad6;
+      color: #93000a;
+      padding: 8px 12px;
+      border-radius: var(--md-sys-shape-corner-small);
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .role-hint {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--md-sys-color-outline-variant);
+      font-size: 0.75rem;
+      color: var(--md-sys-color-outline);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Bar -->
+  <header class="top-app-bar">
+    <div class="brand-wrapper">
+      <a href="/catalog" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
+        <div class="brand-icon">
+          <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+        </div>
+        <h1>Buku Resep</h1>
+      </a>
+    </div>
+  </header>
+
+  <main class="login-wrapper">
+    <div class="login-card">
+      <div class="login-icon">
+        <i data-lucide="lock" style="width: 24px; height: 24px;"></i>
+      </div>
+      <div class="login-title">Admin Authentication</div>
+      <p class="login-sub">Masuk untuk mengelola dan memvalidasi data resep.</p>
+
+      <div id="errorBox" class="error-msg"></div>
+
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="username" class="form-input" placeholder="Masukkan username" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Masukkan password" required>
+        </div>
+
+        <button type="submit" class="btn-submit">
+          <i data-lucide="log-in" style="width: 18px; height: 18px;"></i>
+          Masuk Dashboard
+        </button>
+      </form>
+
+      <div class="role-hint">
+        <strong>Akun Default:</strong><br>
+        • <strong>Admin (Full CRUD):</strong> <code>admin</code> / <code>admin123</code><br>
+        • <strong>Editor (Edit Only):</strong> <code>editor</code> / <code>editor123</code>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('username').value.trim();
+      const p = document.getElementById('password').value;
+      const errBox = document.getElementById('errorBox');
+      errBox.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.status === 'ok') {
+          window.location.href = '/admin';
+        } else {
+          errBox.innerText = data.detail || 'Username atau password salah.';
+          errBox.style.display = 'block';
+        }
+      } catch (err) {
+        errBox.innerText = 'Gagal terhubung ke server.';
+        errBox.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>

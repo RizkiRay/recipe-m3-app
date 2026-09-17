@@ -149,10 +149,17 @@
         <h1>Buku Resep</h1>
       </a>
     </div>
-    <div style="display: flex; gap: 8px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="badge-count" style="background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);">
+        <i data-lucide="user-check" style="width: 14px; height: 14px;"></i>
+        {{ user.username }} ({{ user.role|upper }})
+      </span>
       <a href="/catalog" class="btn-action">
         <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
-        Katalog Web
+        Katalog
+      </a>
+      <a href="/logout" class="btn-action danger" title="Keluar">
+        <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
       </a>
     </div>
   </header>
@@ -220,14 +227,16 @@
               <td style="text-align: right; white-space: nowrap;">
                 <a href="/admin/edit/{{ r.id }}" class="btn-action primary">
                   <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
-                  Edit Resep
+                  Edit
                 </a>
                 <a href="/recipe/{{ r.slug }}" class="btn-action" target="_blank" title="Lihat Tampilan Masak">
                   <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
                 </a>
-                <button onclick="deleteRecipe('{{ r.id }}', '{{ r.title|escape }}')" class="btn-action danger" title="Hapus">
-                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                </button>
+                {% if user.role == 'admin' %}
+                  <button onclick="deleteRecipe('{{ r.id }}', '{{ r.title|escape }}')" class="btn-action danger" title="Hapus Resep">
+                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                  </button>
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
