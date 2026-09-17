@@ -110,30 +110,81 @@
     }
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
     }
     .stat-card {
       background: var(--md-sys-color-surface-container-low);
       border: 1px solid var(--md-sys-color-outline-variant);
-      border-radius: var(--md-sys-shape-corner-large);
-      padding: 16px;
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 12px 10px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      align-items: center;
+      text-align: center;
+      gap: 2px;
     }
     .stat-value {
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       font-weight: 800;
       color: var(--md-sys-color-primary);
+      line-height: 1.2;
     }
     .stat-label {
-      font-size: 0.8rem;
-      font-weight: 600;
+      font-size: 0.68rem;
+      font-weight: 700;
       color: var(--md-sys-color-outline);
       text-transform: uppercase;
       letter-spacing: 0.04em;
+    }
+
+    /* Mobile Responsive Card List (Replacing desktop table) */
+    .recipe-cards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .admin-recipe-card {
+      background: var(--md-sys-color-surface-container-low);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-large);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.15s;
+    }
+    .admin-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .admin-card-title {
+      font-weight: 800;
+      font-size: 0.98rem;
+      color: var(--md-sys-color-on-surface);
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+    .admin-card-chef {
+      font-size: 0.8rem;
+      color: var(--md-sys-color-primary);
+      font-weight: 600;
+    }
+    .admin-card-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .admin-card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--md-sys-color-outline-variant);
     }
   </style>
 </head>
@@ -182,66 +233,65 @@
       </div>
     </div>
 
-    <!-- Header Actions -->
+    <!-- Header Actions & Search -->
     <div class="admin-header">
       <div class="admin-title">
-        <i data-lucide="shield-check" style="width: 24px; height: 24px; color: var(--md-sys-color-primary);"></i>
-        Manajemen Data Resep
+        <i data-lucide="shield-check" style="width: 22px; height: 22px; color: var(--md-sys-color-primary);"></i>
+        Manajemen Resep
       </div>
-      <div class="search-wrapper">
+      <div class="search-wrapper" style="width: 100%; max-width: 100%;">
         <i data-lucide="search" class="search-icon" style="width: 16px; height: 16px;"></i>
-        <input type="text" id="recipeSearch" class="search-box" placeholder="Cari resep atau koki..." oninput="filterRecipes()">
+        <input type="text" id="recipeSearch" class="search-box" style="max-width: 100%;" placeholder="Cari resep atau koki..." oninput="filterRecipes()">
       </div>
     </div>
 
-    <!-- Recipe List Table -->
-    <div style="overflow-x: auto;">
-      <table class="recipe-table">
-        <tbody>
-          {% for r in recipes %}
-            <tr class="recipe-row" id="row-{{ r.id }}" data-title="{{ r.title|lower }}" data-chef="{{ r.chef|lower }}">
-              <td style="width: 50px; font-weight: 700; color: var(--md-sys-color-outline);">
-                #{{ loop.index }}
-              </td>
-              <td>
-                <div style="font-weight: 800; font-size: 1rem; color: var(--md-sys-color-on-surface); margin-bottom: 2px;">
-                  {{ r.title }}
-                </div>
-                <div style="font-size: 0.8rem; color: var(--md-sys-color-primary); font-weight: 600;">
-                  {{ r.chef }}
-                  {% if r.media_url %}
-                    • <a href="{{ r.media_url }}" target="_blank" style="color: inherit; text-decoration: underline;">Video Asli ↗</a>
-                  {% endif %}
-                </div>
-              </td>
-              <td style="white-space: nowrap;">
-                <span class="badge-count">
-                  <i data-lucide="carrot" style="width: 14px; height: 14px;"></i>
-                  {{ r.ing_count }} Bahan
-                </span>
-                <span class="badge-count" style="margin-left: 6px;">
-                  <i data-lucide="list-ordered" style="width: 14px; height: 14px;"></i>
-                  {{ r.step_count }} Langkah
-                </span>
-              </td>
-              <td style="text-align: right; white-space: nowrap;">
-                <a href="/admin/edit/{{ r.id }}" class="btn-action primary">
-                  <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
-                  Edit
-                </a>
-                <a href="/recipe/{{ r.slug }}" class="btn-action" target="_blank" title="Lihat Tampilan Masak">
-                  <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
-                </a>
-                {% if user.role == 'admin' %}
-                  <button onclick="deleteRecipe('{{ r.id }}', '{{ r.title|escape }}')" class="btn-action danger" title="Hapus Resep">
-                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
-                  </button>
+    <!-- Recipe List Cards (Mobile-First Layout) -->
+    <div class="recipe-cards-list">
+      {% for r in recipes %}
+        <div class="admin-recipe-card" id="row-{{ r.id }}" data-title="{{ r.title|lower }}" data-chef="{{ r.chef|lower }}">
+          <div class="admin-card-top">
+            <div>
+              <div class="admin-card-title">{{ r.title }}</div>
+              <div class="admin-card-chef">
+                {{ r.chef }}
+                {% if r.media_url %}
+                  • <a href="{{ r.media_url }}" target="_blank" style="color: inherit; text-decoration: underline;">Video Asli ↗</a>
                 {% endif %}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              </div>
+            </div>
+            <span style="font-size: 0.75rem; font-weight: 800; color: var(--md-sys-color-outline);">
+              #{{ loop.index }}
+            </span>
+          </div>
+
+          <div class="admin-card-badges">
+            <span class="badge-count">
+              <i data-lucide="carrot" style="width: 13px; height: 13px;"></i>
+              {{ r.ing_count }} Bahan
+            </span>
+            <span class="badge-count">
+              <i data-lucide="list-ordered" style="width: 13px; height: 13px;"></i>
+              {{ r.step_count }} Langkah
+            </span>
+          </div>
+
+          <div class="admin-card-actions">
+            <a href="/recipe/{{ r.slug }}" class="btn-action" target="_blank" title="Lihat Tampilan Masak">
+              <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+              Lihat
+            </a>
+            <a href="/admin/edit/{{ r.id }}" class="btn-action primary">
+              <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
+              Edit
+            </a>
+            {% if user.role == 'admin' %}
+              <button onclick="deleteRecipe('{{ r.id }}', '{{ r.title|escape }}')" class="btn-action danger" title="Hapus Resep">
+                <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
     </div>
 
   </main>
