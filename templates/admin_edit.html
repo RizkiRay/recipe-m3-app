@@ -11,22 +11,22 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     .editor-container {
-      max-width: 840px;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 24px 16px 80px;
+      padding: 16px 12px 100px;
     }
     .form-section {
       background: var(--md-sys-color-surface-container-low);
       border: 1px solid var(--md-sys-color-outline-variant);
       border-radius: var(--md-sys-shape-corner-large);
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 16px 14px;
+      margin-bottom: 16px;
     }
     .section-head {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: var(--md-sys-color-on-surface);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -34,72 +34,111 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-bottom: 14px;
+      gap: 5px;
+      margin-bottom: 12px;
     }
     .form-group label {
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: var(--md-sys-color-outline);
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
     .form-control {
-      padding: 10px 14px;
+      width: 100%;
+      padding: 10px 12px;
       background: var(--md-sys-color-surface-container-lowest);
       border: 1px solid var(--md-sys-color-outline-variant);
       border-radius: var(--md-sys-shape-corner-medium);
       color: var(--md-sys-color-on-surface);
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       outline: none;
     }
     .form-control:focus {
       border-color: var(--md-sys-color-primary);
     }
-    .form-grid-3 {
+    .form-grid-2 {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
-    .item-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 2fr 40px;
+    
+    /* Mobile-first card style for ingredient items */
+    .ing-card-item {
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
       gap: 8px;
-      align-items: center;
-      margin-bottom: 8px;
+      position: relative;
     }
-    .step-row {
-      display: grid;
-      grid-template-columns: 3fr 1fr 40px;
+    .ing-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 8px;
-      align-items: center;
-      margin-bottom: 8px;
     }
+    .ing-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    
+    /* Mobile-first card style for steps */
+    .step-card-item {
+      background: var(--md-sys-color-surface-container-lowest);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .step-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .step-card-timer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
     .btn-row-del {
-      background: transparent;
+      background: var(--md-sys-color-surface-container-highest);
       border: none;
       color: #ba1a1a;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 38px;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--md-sys-shape-corner-full);
+      flex-shrink: 0;
     }
     .btn-add-item {
-      padding: 8px 14px;
-      border-radius: var(--md-sys-shape-corner-full);
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--md-sys-shape-corner-medium);
       border: 1px dashed var(--md-sys-color-primary);
       background: transparent;
       color: var(--md-sys-color-primary);
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 700;
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 6px;
     }
     .editor-bottom-bar {
       position: fixed;
@@ -108,27 +147,36 @@
       right: 0;
       background: var(--md-sys-color-surface-container);
       border-top: 1px solid var(--md-sys-color-outline-variant);
-      padding: 12px 16px;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 10px;
       z-index: 100;
+      box-shadow: var(--md-sys-elevation-3);
+    }
+    .editor-bottom-bar .btn-action {
+      flex: 1;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.92rem;
     }
   </style>
 </head>
 <body>
 
   <!-- Top App Bar -->
-  <header class="top-app-bar">
+  <header class="top-app-bar" style="padding: 14px 16px; min-height: 64px;">
     <div class="brand-wrapper">
       <a href="/admin" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 8px;">
         <div class="brand-icon">
           <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
         </div>
-        <h1>Edit Resep</h1>
+        <h1 style="font-size: 1.05rem;">Edit Resep</h1>
       </a>
     </div>
-    <div style="font-size: 0.85rem; font-weight: 700; color: var(--md-sys-color-primary);">
+    <div style="font-size: 0.8rem; font-weight: 800; color: var(--md-sys-color-primary);">
       ID #{{ recipe.id }}
     </div>
   </header>
@@ -139,7 +187,7 @@
     <section class="form-section">
       <div class="section-head">
         <i data-lucide="info" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
-        Informasi Utama Resep
+        Informasi Utama
       </div>
       
       <div class="form-group">
@@ -147,11 +195,18 @@
         <input type="text" id="recipeTitle" class="form-control" value="{{ recipe.title }}">
       </div>
 
-      <div class="form-grid-3">
+      <div class="form-grid-2">
         <div class="form-group">
           <label>Koki / Pembuat</label>
           <input type="text" id="recipeChef" class="form-control" value="{{ recipe.chef }}">
         </div>
+        <div class="form-group">
+          <label>Porsi Sajian</label>
+          <input type="text" id="recipeServings" class="form-control" value="{{ recipe.servings }}">
+        </div>
+      </div>
+
+      <div class="form-grid-2">
         <div class="form-group">
           <label>Durasi Persiapan</label>
           <input type="text" id="recipePrepTime" class="form-control" value="{{ recipe.prep_time }}">
@@ -162,15 +217,9 @@
         </div>
       </div>
 
-      <div class="form-grid-3">
-        <div class="form-group">
-          <label>Porsi Sajian</label>
-          <input type="text" id="recipeServings" class="form-control" value="{{ recipe.servings }}">
-        </div>
-        <div class="form-group" style="grid-column: span 2;">
-          <label>Link Video Sumber (YouTube / Instagram)</label>
-          <input type="text" id="recipeMediaUrl" class="form-control" value="{{ recipe.media_url or '' }}">
-        </div>
+      <div class="form-group">
+        <label>Link Video Sumber (YouTube / Instagram)</label>
+        <input type="text" id="recipeMediaUrl" class="form-control" value="{{ recipe.media_url or '' }}">
       </div>
 
       <div class="form-group">
@@ -185,26 +234,31 @@
         <i data-lucide="carrot" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
         Daftar Bahan & Takaran
       </div>
-      
-      <div style="font-size: 0.75rem; color: var(--md-sys-color-outline); font-weight: 700; display: grid; grid-template-columns: 2fr 1fr 1fr 2fr 40px; gap: 8px; margin-bottom: 6px;">
-        <span>NAMA BAHAN</span>
-        <span>JUMLAH</span>
-        <span>SATUAN</span>
-        <span>CATATAN PERSIAPAN</span>
-        <span></span>
-      </div>
 
       <div id="ingredientsList">
         {% for g in recipe.ingredient_groups %}
           {% for item in g.ingredients_list %}
-            <div class="item-row" id="ing-row-{{ loop.index0 }}">
-              <input type="text" class="form-control ing-item" placeholder="Nama Bahan" value="{{ item.item }}">
-              <input type="text" class="form-control ing-amount" placeholder="Jumlah" value="{{ item.amount }}">
-              <input type="text" class="form-control ing-unit" placeholder="Satuan" value="{{ item.unit }}">
-              <input type="text" class="form-control ing-notes" placeholder="Catatan (Giling halus, dll)" value="{{ item.notes }}">
-              <button type="button" class="btn-row-del" onclick="this.parentElement.remove()">
-                <i data-lucide="x" style="width: 16px; height: 16px;"></i>
-              </button>
+            <div class="ing-card-item">
+              <div class="ing-card-header">
+                <input type="text" class="form-control ing-item" style="font-weight: 700;" placeholder="Nama Bahan (contoh: Daging Ayam)" value="{{ item.item }}">
+                <button type="button" class="btn-row-del" onclick="this.closest('.ing-card-item').remove()" title="Hapus Bahan">
+                  <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                </button>
+              </div>
+              <div class="ing-card-grid">
+                <div>
+                  <label style="font-size: 0.68rem; font-weight: 700; color: var(--md-sys-color-outline);">JUMLAH</label>
+                  <input type="text" class="form-control ing-amount" placeholder="contoh: 500" value="{{ item.amount }}">
+                </div>
+                <div>
+                  <label style="font-size: 0.68rem; font-weight: 700; color: var(--md-sys-color-outline);">SATUAN</label>
+                  <input type="text" class="form-control ing-unit" placeholder="contoh: gr, sdm, sdt" value="{{ item.unit }}">
+                </div>
+              </div>
+              <div>
+                <label style="font-size: 0.68rem; font-weight: 700; color: var(--md-sys-color-outline);">CATATAN PERSIAPAN (OPSIONAL)</label>
+                <input type="text" class="form-control ing-notes" placeholder="contoh: Giling halus / iris tipis" value="{{ item.notes }}">
+              </div>
             </div>
           {% endfor %}
         {% endfor %}
@@ -212,7 +266,7 @@
 
       <button type="button" class="btn-add-item" onclick="addIngredientRow()">
         <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
-        Tambah Bahan
+        Tambah Bahan Baru
       </button>
     </section>
 
@@ -220,30 +274,34 @@
     <section class="form-section">
       <div class="section-head">
         <i data-lucide="list-ordered" style="width: 18px; height: 18px; color: var(--md-sys-color-primary);"></i>
-        Instruksi & Langkah Memasak
-      </div>
-
-      <div style="font-size: 0.75rem; color: var(--md-sys-color-outline); font-weight: 700; display: grid; grid-template-columns: 3fr 1fr 40px; gap: 8px; margin-bottom: 6px;">
-        <span>INSTRUKSI LANGKAH</span>
-        <span>TIMER (DETIK)</span>
-        <span></span>
+        Instruksi Langkah Memasak
       </div>
 
       <div id="stepsList">
         {% for s in recipe.instructions %}
-          <div class="step-row" id="step-row-{{ loop.index0 }}">
-            <input type="text" class="form-control step-detail" placeholder="Instruksi Memasak" value="{{ s.detail }}">
-            <input type="number" class="form-control step-timer" placeholder="0 detik" value="{{ s.timer_seconds }}">
-            <button type="button" class="btn-row-del" onclick="this.parentElement.remove()">
-              <i data-lucide="x" style="width: 16px; height: 16px;"></i>
-            </button>
+          <div class="step-card-item">
+            <div class="step-card-header">
+              <span style="font-size: 0.75rem; font-weight: 800; color: var(--md-sys-color-primary);">
+                LANGKAH {{ loop.index }}
+              </span>
+              <button type="button" class="btn-row-del" onclick="this.closest('.step-card-item').remove()" title="Hapus Langkah">
+                <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+              </button>
+            </div>
+            <div>
+              <textarea class="form-control step-detail" rows="2" placeholder="Instruksi Memasak">{{ s.detail }}</textarea>
+            </div>
+            <div class="step-card-timer">
+              <label style="font-size: 0.72rem; font-weight: 700; color: var(--md-sys-color-outline); white-space: nowrap;">TIMER (DETIK):</label>
+              <input type="number" class="form-control step-timer" style="max-width: 120px;" placeholder="0 detik" value="{{ s.timer_seconds }}">
+            </div>
           </div>
         {% endfor %}
       </div>
 
       <button type="button" class="btn-add-item" onclick="addStepRow()">
         <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
-        Tambah Langkah
+        Tambah Langkah Baru
       </button>
     </section>
 
@@ -256,7 +314,7 @@
     </a>
     <button type="button" class="btn-action primary" onclick="saveRecipeData()">
       <i data-lucide="save" style="width: 16px; height: 16px;"></i>
-      Simpan Perubahan
+      Simpan Resep
     </button>
   </footer>
 
@@ -267,29 +325,53 @@
 
     function addIngredientRow() {
       const div = document.createElement('div');
-      div.className = 'item-row';
+      div.className = 'ing-card-item';
       div.innerHTML = `
-        <input type="text" class="form-control ing-item" placeholder="Nama Bahan">
-        <input type="text" class="form-control ing-amount" placeholder="Jumlah">
-        <input type="text" class="form-control ing-unit" placeholder="Satuan">
-        <input type="text" class="form-control ing-notes" placeholder="Catatan">
-        <button type="button" class="btn-row-del" onclick="this.parentElement.remove()">
-          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
-        </button>
+        <div class="ing-card-header">
+          <input type="text" class="form-control ing-item" style="font-weight: 700;" placeholder="Nama Bahan">
+          <button type="button" class="btn-row-del" onclick="this.closest('.ing-card-item').remove()">
+            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+        <div class="ing-card-grid">
+          <div>
+            <label style="font-size: 0.68rem; font-weight: 700; color: var(--md-sys-color-outline);">JUMLAH</label>
+            <input type="text" class="form-control ing-amount" placeholder="contoh: 500">
+          </div>
+          <div>
+            <label style="font-size: 0.68rem; font-weight: 700; color: var(--md-sys-color-outline);">SATUAN</label>
+            <input type="text" class="form-control ing-unit" placeholder="contoh: gr">
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 0.68rem; font-weight: 700; color: var(--md-sys-color-outline);">CATATAN PERSIAPAN</label>
+          <input type="text" class="form-control ing-notes" placeholder="contoh: Giling halus">
+        </div>
       `;
       document.getElementById('ingredientsList').appendChild(div);
       if (window.lucide) lucide.createIcons();
     }
 
     function addStepRow() {
+      const currentCount = document.querySelectorAll('#stepsList .step-card-item').length + 1;
       const div = document.createElement('div');
-      div.className = 'step-row';
+      div.className = 'step-card-item';
       div.innerHTML = `
-        <input type="text" class="form-control step-detail" placeholder="Instruksi Memasak">
-        <input type="number" class="form-control step-timer" placeholder="0 detik" value="0">
-        <button type="button" class="btn-row-del" onclick="this.parentElement.remove()">
-          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
-        </button>
+        <div class="step-card-header">
+          <span style="font-size: 0.75rem; font-weight: 800; color: var(--md-sys-color-primary);">
+            LANGKAH ${currentCount}
+          </span>
+          <button type="button" class="btn-row-del" onclick="this.closest('.step-card-item').remove()">
+            <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+        <div>
+          <textarea class="form-control step-detail" rows="2" placeholder="Instruksi Memasak"></textarea>
+        </div>
+        <div class="step-card-timer">
+          <label style="font-size: 0.72rem; font-weight: 700; color: var(--md-sys-color-outline); white-space: nowrap;">TIMER (DETIK):</label>
+          <input type="number" class="form-control step-timer" style="max-width: 120px;" placeholder="0 detik" value="0">
+        </div>
       `;
       document.getElementById('stepsList').appendChild(div);
       if (window.lucide) lucide.createIcons();
@@ -309,19 +391,19 @@
         steps: []
       };
 
-      document.querySelectorAll('#ingredientsList .item-row').forEach(row => {
-        const item = row.querySelector('.ing-item').value.trim();
-        const amount = row.querySelector('.ing-amount').value.trim();
-        const unit = row.querySelector('.ing-unit').value.trim();
-        const notes = row.querySelector('.ing-notes').value.trim();
+      document.querySelectorAll('#ingredientsList .ing-card-item').forEach(card => {
+        const item = card.querySelector('.ing-item').value.trim();
+        const amount = card.querySelector('.ing-amount').value.trim();
+        const unit = card.querySelector('.ing-unit').value.trim();
+        const notes = card.querySelector('.ing-notes').value.trim();
         if (item) {
           payload.ingredients.push({ item, amount, unit, notes });
         }
       });
 
-      document.querySelectorAll('#stepsList .step-row').forEach((row, idx) => {
-        const detail = row.querySelector('.step-detail').value.trim();
-        const timer = parseInt(row.querySelector('.step-timer').value || 0);
+      document.querySelectorAll('#stepsList .step-card-item').forEach((card, idx) => {
+        const detail = card.querySelector('.step-detail').value.trim();
+        const timer = parseInt(card.querySelector('.step-timer').value || 0);
         if (detail) {
           payload.steps.push({ step_number: idx + 1, detail, timer_seconds: timer });
         }
